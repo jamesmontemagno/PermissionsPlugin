@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Contacts;
 #if WINDOWS_UWP
 using Windows.Devices.Geolocation;
+using Windows.ApplicationModel.Contacts;
 #endif
 
 namespace Plugin.Permissions
@@ -61,7 +61,7 @@ namespace Plugin.Permissions
 
         private async Task<PermissionStatus> CheckContactsAsync()
         {
-#if WINDOWS_UWP || WINDOWS_PHONE_APP
+#if WINDOWS_UWP
             var accessStatus = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
 
             if (accessStatus == null)
