@@ -1,4 +1,4 @@
-## ![](plugin_permissions.png) Permissions Plugin for Xamarin
+## Permissions Plugin for Xamarin
 
 Simple cross platform plugin to request and check permissions.
 
@@ -7,7 +7,8 @@ Want to read about the creation, checkout my [in-depth blog post](http://motzcod
 ### Setup
 * Available on NuGet: http://www.nuget.org/packages/Plugin.Permissions [![NuGet](https://img.shields.io/nuget/v/Plugin.Permissions.svg?label=NuGet)](https://www.nuget.org/packages/Plugin.Permissions/)
 * Install into your PCL project and Client projects.
-*
+
+Build Status: [![Build status](https://ci.appveyor.com/api/projects/status/n0vn5715cx5f7rpy?svg=true)](https://ci.appveyor.com/project/JamesMontemagno/permissionsplugin)
 
 ### Android specific in your BaseActivity or MainActivity (for Xamarin.Forms) add this code:
 ```csharp
