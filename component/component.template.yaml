@@ -8,7 +8,6 @@ license: License.md
 skip_docs: true
 icons: 
   - PermissionsPlugin_128x128.png
-  - PermissionsPlugin_512x512.png
 publisher-url: http://www.github.com/jamesmontemagno/PermissionsPlugin
 is_shell: true
 packages:
