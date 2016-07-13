@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Devices.Enumeration;
 #if WINDOWS_UWP
 using Windows.Devices.Geolocation;
 using Windows.ApplicationModel.Contacts;
@@ -15,6 +16,9 @@ namespace Plugin.Permissions
     /// </summary>
     public class PermissionsImplementation : IPermissions
     {
+#if WINDOWS_UWP
+        Guid ActivitySensorClassId = new Guid("9D9E0118-1807-4F2E-96E4-2CE57142E196");
+#endif
         /// <summary>
         /// Request to see if you should show a rationale for requesting permission
         /// Only on Android
@@ -40,7 +44,7 @@ namespace Plugin.Permissions
                 case Permission.Camera:
                     break;
                 case Permission.Contacts:
-                    break;
+                    return CheckContactsAsync();
                 case Permission.Location:
                     return CheckLocationAsync();
                 case Permission.Microphone:
@@ -54,7 +58,23 @@ namespace Plugin.Permissions
                 case Permission.Reminders:
                     break;
                 case Permission.Sensors:
-                    break;
+                    {
+#if WINDOWS_UWP
+                        // Determine if the user has allowed access to activity sensors
+                        var deviceAccessInfo = DeviceAccessInformation.CreateFromDeviceClassId(ActivitySensorClassId);
+                        switch(deviceAccessInfo.CurrentStatus)
+                        {
+                            case DeviceAccessStatus.Allowed:
+                                return Task.FromResult(PermissionStatus.Granted);
+                            case DeviceAccessStatus.DeniedBySystem:
+                            case DeviceAccessStatus.DeniedByUser:
+                                return Task.FromResult(PermissionStatus.Denied);
+                            default:
+                                return Task.FromResult(PermissionStatus.Unknown);
+                        }
+#endif
+                    }
+                 break;
             }
             return Task.FromResult(PermissionStatus.Granted);
         }
@@ -70,7 +90,7 @@ namespace Plugin.Permissions
             return PermissionStatus.Granted;
 #endif
 
-            return PermissionStatus.Unknown;
+            return PermissionStatus.Granted;
         }
 
         private async Task<PermissionStatus> CheckLocationAsync()
@@ -90,7 +110,7 @@ namespace Plugin.Permissions
             return PermissionStatus.Denied;
 #endif
 
-            return PermissionStatus.Unknown;
+            return PermissionStatus.Granted;
         }
 
         /// <summary>
