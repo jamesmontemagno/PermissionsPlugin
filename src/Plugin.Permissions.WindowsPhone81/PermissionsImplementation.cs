@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Devices.Enumeration;
 #if WINDOWS_UWP
 using Windows.Devices.Geolocation;
 using Windows.ApplicationModel.Contacts;
+using Windows.Devices.Enumeration;
 #endif
 
 namespace Plugin.Permissions
