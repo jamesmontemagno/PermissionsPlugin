@@ -18,6 +18,9 @@ public override void OnRequestPermissionsResult(int requestCode, string[] permis
 }
 ```
 
+You MUST set your Target version to API 23 and Compile against API 23:
+![image](https://cloud.githubusercontent.com/assets/1676321/17110560/7279341c-5252-11e6-89be-8c10b38c0ea6.png)
+
 **Platform Support**
 
 |Platform|Supported|Version|
