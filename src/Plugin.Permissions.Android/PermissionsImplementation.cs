@@ -296,6 +296,7 @@ namespace Plugin.Permissions
                             permissionNames.Add(Manifest.Permission.AccessFineLocation);
                     }
                     break;
+                case Permission.Speech:    
                 case Permission.Microphone:
                     {
                         if(HasPermissionInManifest(Manifest.Permission.RecordAudio))

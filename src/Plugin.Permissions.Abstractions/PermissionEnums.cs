@@ -90,6 +90,11 @@
         /// Android: External Storage
         /// iOS: Nothing
         /// </summary>
-        Storage
+        Storage,
+        /// <summary>
+        /// Android: Microphone
+        /// iOS: Speech
+        /// </summary>
+        Speech
     }
 }

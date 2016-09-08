@@ -11,7 +11,7 @@ using EventKit;
 using UIKit;
 using Photos;
 using System.Diagnostics;
-
+using Speech;
 
 namespace Plugin.Permissions
 {
@@ -76,6 +76,8 @@ namespace Plugin.Permissions
                     return Task.FromResult(GetEventPermissionStatus(EKEntityType.Reminder));
                 case Permission.Sensors:
                     return Task.FromResult((CMMotionActivityManager.IsActivityAvailable ? PermissionStatus.Granted : PermissionStatus.Denied));
+                case Permission.Speech:
+                    return Task.FromResult(null);
             }
             return Task.FromResult(PermissionStatus.Granted);
         }
@@ -425,6 +427,56 @@ namespace Plugin.Permissions
             }
 
             return PermissionStatus.Unknown;
+        }
+        #endregion
+
+        #region Speech
+        Task<PermissionStatus> RequestSpeechPermission()
+        {
+            if (SpeechPermissionStatus != PermissionStatus.Unknown)
+                return Task.FromResult(SpeechPermissionStatus);
+
+            var tcs = new TaskCompletionSource<PermissionStatus>();
+
+            SFSpeechRecognizer.RequestAuthorization(status => 
+            {
+                switch(status)
+                {
+                    case SFSpeechRecognizerAuthorizationStatus.Authorized:
+                        tcs.SetResult(PermissionStatus.Granted);
+                        break;
+                    case SFSpeechRecognizerAuthorizationStatus.Denied:
+                        tcs.SetResult(PermissionStatus.Denied);
+                        break;
+                    case SFSpeechRecognizerAuthorizationStatus.Restricted:
+                        tcs.SetResult(PermissionStatus.Restricted);
+                        break;
+                    default:
+                        tcs.SetResult(PermissionStatus.Unknown);
+                        break;
+                }                
+            });
+            return tcs.Task;
+        }
+
+
+        PermissionStatus SpeechPermissionStatus
+        {
+            get
+            {
+                var status = SFSpeechRecognizer.AuthorizationStatus;
+                switch (status)
+                {
+                    case SFSpeechRecognizerAuthorizationStatus.Authorized:
+                        return PermissionStatus.Granted;
+                    case SFSpeechRecognizerAuthorizationStatus.Denied:
+                        return PermissionStatus.Denied;
+                    case SFSpeechRecognizerAuthorizationStatus.Restricted:
+                        return PermissionStatus.Restricted;
+                    default:
+                        return PermissionStatus.Unknown;
+                }
+            }
         }
         #endregion
     }
