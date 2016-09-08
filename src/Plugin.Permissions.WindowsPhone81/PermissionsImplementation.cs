@@ -47,6 +47,7 @@ namespace Plugin.Permissions
                     return CheckContactsAsync();
                 case Permission.Location:
                     return CheckLocationAsync();
+                case Permission.Speech:
                 case Permission.Microphone:
                     break;
                 //case Permission.NotificationsLocal:
@@ -104,7 +105,7 @@ namespace Plugin.Permissions
                     return PermissionStatus.Granted;
                 case GeolocationAccessStatus.Unspecified:
                     return PermissionStatus.Unknown;
-                    
+
             }
 
             return PermissionStatus.Denied;
