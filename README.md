@@ -8,6 +8,18 @@ Want to read about the creation, checkout my [in-depth blog post](http://motzcod
 * Available on NuGet: http://www.nuget.org/packages/Plugin.Permissions [![NuGet](https://img.shields.io/nuget/v/Plugin.Permissions.svg?label=NuGet)](https://www.nuget.org/packages/Plugin.Permissions/)
 * Install into your PCL project and Client projects.
 
+**Platform Support**
+
+|Platform|Supported|Version|
+| ------------------- | :-----------: | :------------------: |
+|Xamarin.iOS|Yes|iOS 7+|
+|Xamarin.Android|Yes|API 14+|
+|Windows Phone Silverlight|---|8.0+|
+|Windows Phone RT|---|8.1+|
+|Windows Store RT|---|8.1+|
+|Windows 10 UWP|---|10+|
+|Xamarin.Mac|No||
+
 Build Status: [![Build status](https://ci.appveyor.com/api/projects/status/n0vn5715cx5f7rpy?svg=true)](https://ci.appveyor.com/project/JamesMontemagno/permissionsplugin)
 
 ### Android specific in your BaseActivity or MainActivity (for Xamarin.Forms) add this code:
@@ -18,21 +30,11 @@ public override void OnRequestPermissionsResult(int requestCode, string[] permis
 }
 ```
 
-You MUST set your Target version to API 23 and Compile against API 23:
+You MUST set your Target version to API 23+ and Compile against API 23+:
 ![image](https://cloud.githubusercontent.com/assets/1676321/17110560/7279341c-5252-11e6-89be-8c10b38c0ea6.png)
 
-**Platform Support**
-
-|Platform|Supported|Version|
-| ------------------- | :-----------: | :------------------: |
-|Xamarin.iOS|No||
-|Xamarin.iOS Unified|Yes|iOS 7+|
-|Xamarin.Android|Yes|API 14+|
-|Windows Phone Silverlight|---|8.0+|
-|Windows Phone RT|---|8.1+|
-|Windows Store RT|---|8.1+|
-|Windows 10 UWP|---|10+|
-|Xamarin.Mac|No||
+### iOS Specific
+When building against the iOS 10 SDK (Xcode 8) please be aware of the platform privacy changes. Based on what permissions you are using, you must add information into your info.plist. Please read the [following blog for more information](https://blog.xamarin.com/new-ios-10-privacy-permission-settings/). 
 
 
 ### API Usage
@@ -186,7 +188,6 @@ You still need to request the permissions in your AndroidManifest.xml. Also ensu
 These contain blank implementation and just return Granted status.
 
 #### Contributors
-* [jamesmontemagno](https://github.com/jamesmontemagno)
 * Icon thanks to [Jérémie Laval](https://github.com/garuma)
 
 Thanks!
