@@ -65,11 +65,11 @@ namespace Plugin.Permissions
             foreach(var name in names)
             {
                 if(ActivityCompat.ShouldShowRequestPermissionRationale(activity, name))
-                    return Task.FromResult(true); 
+                    return Task.FromResult(true);
             }
 
             return Task.FromResult(false);
-        
+
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Plugin.Permissions
             if (context == null)
             {
                 Debug.WriteLine("Unable to detect current Activity or App Context. Please ensure Plugin.CurrentActivity is installed in your Android project and your Application class is registering with Application.IActivityLifecycleCallbacks.");
-                return Task.FromResult(PermissionStatus.Unknown);  
+                return Task.FromResult(PermissionStatus.Unknown);
             }
 
             foreach (var name in names)
@@ -206,6 +206,11 @@ namespace Plugin.Permissions
 
                 lock (locker)
                 {
+                    if (permission == Permission.Microphone)
+                    {
+                        if (!results.ContainsKey(Permission.Speech))
+                            results.Add(Permission.Speech, grantResults[i] == Android.Content.PM.Permission.Granted ? PermissionStatus.Granted : PermissionStatus.Denied);
+                    }
                     if (!results.ContainsKey(permission))
                         results.Add(permission, grantResults[i] == Android.Content.PM.Permission.Granted ? PermissionStatus.Granted : PermissionStatus.Denied);
                 }
@@ -278,24 +283,25 @@ namespace Plugin.Permissions
                     {
                         if(HasPermissionInManifest(Manifest.Permission.ReadContacts))
                             permissionNames.Add(Manifest.Permission.ReadContacts);
-                        
+
                         if(HasPermissionInManifest(Manifest.Permission.WriteContacts))
                             permissionNames.Add(Manifest.Permission.WriteContacts);
-                        
+
                         if(HasPermissionInManifest(Manifest.Permission.GetAccounts))
                             permissionNames.Add(Manifest.Permission.GetAccounts);
                     }
-                    break;  
+                    break;
                 case Permission.Location:
                     {
                         if(HasPermissionInManifest(Manifest.Permission.AccessCoarseLocation))
                             permissionNames.Add(Manifest.Permission.AccessCoarseLocation);
 
-                        
+
                         if(HasPermissionInManifest(Manifest.Permission.AccessFineLocation))
                             permissionNames.Add(Manifest.Permission.AccessFineLocation);
                     }
                     break;
+                case Permission.Speech:
                 case Permission.Microphone:
                     {
                         if(HasPermissionInManifest(Manifest.Permission.RecordAudio))
@@ -307,22 +313,22 @@ namespace Plugin.Permissions
                     {
                         if(HasPermissionInManifest(Manifest.Permission.ReadPhoneState))
                             permissionNames.Add(Manifest.Permission.ReadPhoneState);
-                        
+
                         if(HasPermissionInManifest(Manifest.Permission.CallPhone))
                             permissionNames.Add(Manifest.Permission.CallPhone);
-                        
+
                         if(HasPermissionInManifest(Manifest.Permission.ReadCallLog))
                             permissionNames.Add(Manifest.Permission.ReadCallLog);
-                        
+
                         if(HasPermissionInManifest(Manifest.Permission.WriteCallLog))
                             permissionNames.Add(Manifest.Permission.WriteCallLog);
-                        
+
                         if(HasPermissionInManifest(Manifest.Permission.AddVoicemail))
                             permissionNames.Add(Manifest.Permission.AddVoicemail);
-                        
+
                         if(HasPermissionInManifest(Manifest.Permission.UseSip))
                             permissionNames.Add(Manifest.Permission.UseSip);
-                        
+
                         if(HasPermissionInManifest(Manifest.Permission.ProcessOutgoingCalls))
                             permissionNames.Add(Manifest.Permission.ProcessOutgoingCalls);
                     }
@@ -337,16 +343,16 @@ namespace Plugin.Permissions
                    {
                         if(HasPermissionInManifest(Manifest.Permission.SendSms))
                             permissionNames.Add(Manifest.Permission.SendSms);
-                       
+
                         if(HasPermissionInManifest(Manifest.Permission.ReceiveSms))
                             permissionNames.Add(Manifest.Permission.ReceiveSms);
-                       
+
                         if(HasPermissionInManifest(Manifest.Permission.ReadSms))
                             permissionNames.Add(Manifest.Permission.ReadSms);
-                       
+
                         if(HasPermissionInManifest(Manifest.Permission.ReceiveWapPush))
                             permissionNames.Add(Manifest.Permission.ReceiveWapPush);
-                       
+
                         if(HasPermissionInManifest(Manifest.Permission.ReceiveMms))
                             permissionNames.Add(Manifest.Permission.ReceiveMms);
                     }
@@ -355,7 +361,7 @@ namespace Plugin.Permissions
                     {
                         if(HasPermissionInManifest(Manifest.Permission.ReadExternalStorage))
                             permissionNames.Add(Manifest.Permission.ReadExternalStorage);
-                        
+
                         if(HasPermissionInManifest(Manifest.Permission.WriteExternalStorage))
                             permissionNames.Add(Manifest.Permission.WriteExternalStorage);
                     }

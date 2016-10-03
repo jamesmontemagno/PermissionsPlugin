@@ -11,7 +11,7 @@ using EventKit;
 using UIKit;
 using Photos;
 using System.Diagnostics;
-
+using Speech;
 
 namespace Plugin.Permissions
 {
@@ -76,6 +76,8 @@ namespace Plugin.Permissions
                     return Task.FromResult(GetEventPermissionStatus(EKEntityType.Reminder));
                 case Permission.Sensors:
                     return Task.FromResult((CMMotionActivityManager.IsActivityAvailable ? PermissionStatus.Granted : PermissionStatus.Denied));
+                case Permission.Speech:
+                    return Task.FromResult(SpeechPermissionStatus);
             }
             return Task.FromResult(PermissionStatus.Granted);
         }
@@ -92,7 +94,7 @@ namespace Plugin.Permissions
             {
                 if (results.ContainsKey(permission))
                     continue;
-                
+
                 switch (permission)
                 {
                     case Permission.Calendar:
@@ -137,6 +139,9 @@ namespace Plugin.Permissions
                     case Permission.Sensors:
                         results.Add(permission, await RequestSensorsPermission().ConfigureAwait(false));
                         break;
+                    case Permission.Speech:
+                        results.Add(permission, await RequestSpeechPermission().ConfigureAwait(false));
+                        break;
                 }
 
                 if (!results.ContainsKey(permission))
@@ -146,7 +151,7 @@ namespace Plugin.Permissions
             return results;
         }
 
-       
+
 
         #region AV: Camera and Microphone
 
@@ -186,7 +191,7 @@ namespace Plugin.Permissions
                 }
             }
         }
-       
+
         Task<PermissionStatus> RequestContactsPermission()
         {
 
@@ -199,7 +204,7 @@ namespace Plugin.Permissions
             var tcs = new TaskCompletionSource<PermissionStatus>();
 
 
-            addressBook.RequestAccess((success, error) => 
+            addressBook.RequestAccess((success, error) =>
                 {
                     tcs.SetResult((success ? PermissionStatus.Granted : PermissionStatus.Denied));
                 });
@@ -223,7 +228,7 @@ namespace Plugin.Permissions
                 default:
                     return PermissionStatus.Unknown;
             }
-            
+
         }
 
         async Task<PermissionStatus> RequestEventPermission(EKEntityType eventType)
@@ -241,7 +246,7 @@ namespace Plugin.Permissions
         }
         #endregion
 
-        #region Location 
+        #region Location
 
         Task<PermissionStatus> RequestLocationPermission()
         {
@@ -260,11 +265,11 @@ namespace Plugin.Permissions
             EventHandler<CLAuthorizationChangedEventArgs> authCallback = null;
             var tcs = new TaskCompletionSource<PermissionStatus>();
 
-            authCallback = (sender, e) => 
+            authCallback = (sender, e) =>
                 {
                     if(e.Status == CLAuthorizationStatus.NotDetermined)
                         return;
-                    
+
                     locationManager.AuthorizationChanged -= authCallback;
                     tcs.SetResult(LocationPermissionStatus);
                 };
@@ -341,7 +346,7 @@ namespace Plugin.Permissions
                 return PermissionStatus.Granted;
             }
         }
-            
+
         Task<PermissionStatus> RequestNotificationLocalPermission()
         {
             if (NotificationLocalPermissionState == PermissionStatus.Granted)
@@ -425,6 +430,56 @@ namespace Plugin.Permissions
             }
 
             return PermissionStatus.Unknown;
+        }
+        #endregion
+
+        #region Speech
+        Task<PermissionStatus> RequestSpeechPermission()
+        {
+            if (SpeechPermissionStatus != PermissionStatus.Unknown)
+                return Task.FromResult(SpeechPermissionStatus);
+
+            var tcs = new TaskCompletionSource<PermissionStatus>();
+
+            SFSpeechRecognizer.RequestAuthorization(status =>
+            {
+                switch(status)
+                {
+                    case SFSpeechRecognizerAuthorizationStatus.Authorized:
+                        tcs.SetResult(PermissionStatus.Granted);
+                        break;
+                    case SFSpeechRecognizerAuthorizationStatus.Denied:
+                        tcs.SetResult(PermissionStatus.Denied);
+                        break;
+                    case SFSpeechRecognizerAuthorizationStatus.Restricted:
+                        tcs.SetResult(PermissionStatus.Restricted);
+                        break;
+                    default:
+                        tcs.SetResult(PermissionStatus.Unknown);
+                        break;
+                }
+            });
+            return tcs.Task;
+        }
+
+
+        PermissionStatus SpeechPermissionStatus
+        {
+            get
+            {
+                var status = SFSpeechRecognizer.AuthorizationStatus;
+                switch (status)
+                {
+                    case SFSpeechRecognizerAuthorizationStatus.Authorized:
+                        return PermissionStatus.Granted;
+                    case SFSpeechRecognizerAuthorizationStatus.Denied:
+                        return PermissionStatus.Denied;
+                    case SFSpeechRecognizerAuthorizationStatus.Restricted:
+                        return PermissionStatus.Restricted;
+                    default:
+                        return PermissionStatus.Unknown;
+                }
+            }
         }
         #endregion
     }
