@@ -47,13 +47,14 @@ namespace Plugin.Permissions
                     return CheckContactsAsync();
                 case Permission.Location:
                     return CheckLocationAsync();
-                case Permission.Speech:
                 case Permission.Microphone:
                     break;
                 //case Permission.NotificationsLocal:
                 //    break;
                 //case Permission.NotificationsRemote:
                 //    break;
+                case Permission.Phone:
+                    break;
                 case Permission.Photos:
                     break;
                 case Permission.Reminders:
@@ -76,6 +77,12 @@ namespace Plugin.Permissions
 #endif
                     }
                  break;
+                case Permission.Sms:
+                    break;
+                case Permission.Storage:
+                    break;
+                case Permission.Speech:
+                    break;
             }
             return Task.FromResult(PermissionStatus.Granted);
         }
