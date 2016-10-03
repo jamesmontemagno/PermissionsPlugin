@@ -140,7 +140,7 @@ namespace Plugin.Permissions
                         results.Add(permission, await RequestSensorsPermission().ConfigureAwait(false));
                         break;
                     case Permission.Speech:
-                        results.Add(permission, await this.RequestSensorsPermission().ConfigureAwait(false));
+                        results.Add(permission, await RequestSpeechPermission().ConfigureAwait(false));
                         break;
                 }
 
