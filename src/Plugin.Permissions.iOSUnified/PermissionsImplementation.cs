@@ -439,6 +439,12 @@ namespace Plugin.Permissions
             if (SpeechPermissionStatus != PermissionStatus.Unknown)
                 return Task.FromResult(SpeechPermissionStatus);
 
+
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(10, 0))
+            {
+                return Task.FromResult(PermissionStatus.Unknown);
+            }
+
             var tcs = new TaskCompletionSource<PermissionStatus>();
 
             SFSpeechRecognizer.RequestAuthorization(status =>
