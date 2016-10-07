@@ -29,5 +29,12 @@ namespace Plugin.Permissions.Abstractions
         /// <returns>The permissions and their status.</returns>
         /// <param name="permissions">Permissions to request.</param>
         Task<Dictionary<Permission, PermissionStatus>> RequestPermissionsAsync(params Permission[] permissions);
+
+
+        /// <summary>
+        /// Attempts to open the app settings to adjust the permissions.
+        /// </summary>
+        /// <returns>true if success, else false and not supported</returns>
+        bool OpenAppSettings();
     }
 }

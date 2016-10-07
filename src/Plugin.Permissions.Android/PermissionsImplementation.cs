@@ -414,5 +414,31 @@ namespace Plugin.Permissions
             return false;
         }
 
+        public bool OpenAppSettings()
+        {
+
+            var context = CrossCurrentActivity.Current.Activity;
+            if (context == null)
+                return false;
+
+            try
+            {
+                var settingsIntent = new Intent();
+                settingsIntent.SetAction(Android.Provider.Settings.ActionApplicationDetailsSettings); 
+                settingsIntent.AddCategory(Intent.CategoryDefault);
+                settingsIntent.SetData(Android.Net.Uri.Parse("package:" + context.PackageName));
+                settingsIntent.AddFlags(ActivityFlags.NewTask);
+                settingsIntent.AddFlags(ActivityFlags.NoHistory);
+                settingsIntent.AddFlags(ActivityFlags.ExcludeFromRecents);
+                context.StartActivity(settingsIntent);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+
+        }
     }
 }

@@ -468,6 +468,7 @@ namespace Plugin.Permissions
             return tcs.Task;
         }
 
+        
 
         PermissionStatus SpeechPermissionStatus
         {
@@ -488,5 +489,22 @@ namespace Plugin.Permissions
             }
         }
         #endregion
+
+        public bool OpenAppSettings()
+        {
+            //Opening settings only open in iOS 8+
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
+                return false;
+
+            try
+            {
+                UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

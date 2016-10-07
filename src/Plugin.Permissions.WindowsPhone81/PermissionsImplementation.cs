@@ -131,5 +131,10 @@ namespace Plugin.Permissions
             var results = permissions.ToDictionary(permission => permission, permission => PermissionStatus.Granted);
             return Task.FromResult(results);
         }
+
+        public bool OpenAppSettings()
+        {
+            return false;
+        }
     }
 }
