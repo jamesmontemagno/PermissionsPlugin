@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Geolocator.Plugin;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using Xamarin.Forms;
@@ -16,6 +15,11 @@ namespace PermissionsTest
         {
             InitializeComponent();
         }
+
+		void OpenSettings_Clicked(object sender, System.EventArgs e)
+		{
+			CrossPermissions.Current.OpenAppSettings();
+		}
 
         bool busy;
         async void ButtonPermission_OnClicked(object sender, EventArgs e)
@@ -131,8 +135,8 @@ namespace PermissionsTest
 
                 if (status == PermissionStatus.Granted)
                 {
-                    var results = await CrossGeolocator.Current.GetPositionAsync(10000);
-                    LabelGeolocation.Text = "Lat: " + results.Latitude + " Long: " + results.Longitude;
+                    //var results = await CrossGeolocator.Current.GetPositionAsync(10000);
+                    //LabelGeolocation.Text = "Lat: " + results.Latitude + " Long: " + results.Longitude;
                 }
                 else if(status != PermissionStatus.Unknown)
                 {
