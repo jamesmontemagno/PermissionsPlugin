@@ -59,6 +59,9 @@ namespace PermissionsSample
                 case "Storage":
                     status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Storage);
                     break;
+                case "Settings":
+                    CrossPermissions.Current.OpenAppSettings();
+                    return;
             }
 
             await DisplayAlert("Results", status.ToString(), "OK");

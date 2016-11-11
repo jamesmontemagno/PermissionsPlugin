@@ -17,6 +17,7 @@
         <Button Text="Sensors" StyleId="Sensors" Clicked="ButtonPermission_OnClicked"></Button>
         <Button Text="Sms" StyleId="Sms" Clicked="ButtonPermission_OnClicked"></Button>
         <Button Text="Storage" StyleId="Storage" Clicked="ButtonPermission_OnClicked"></Button>
+        <Button Text="Open Settings" StyleId="Settings" Clicked="ButtonPermission_OnClicked"></Button>
       </StackLayout>
   </ScrollView>
 </ContentPage>
