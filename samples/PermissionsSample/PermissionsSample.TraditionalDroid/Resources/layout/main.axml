@@ -22,5 +22,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/Navigation" />
+      <FrameLayout
+           android:id="@+id/content_frame"
+           android:layout_width="match_parent"
+           android:layout_weight="1"
+           android:layout_height="0dp" />
     </LinearLayout>
 </RelativeLayout>

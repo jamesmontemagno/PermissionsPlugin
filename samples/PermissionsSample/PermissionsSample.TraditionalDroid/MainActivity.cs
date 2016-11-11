@@ -52,6 +52,15 @@ namespace PermissionsSample.TraditionalDroid
               };
 
 
+            Android.Support.V4.App.Fragment fragment = null;
+
+                    fragment = Fragment1.NewInstance();
+                
+
+            SupportFragmentManager.BeginTransaction()
+                .Replace(Resource.Id.content_frame, fragment)
+                .Commit();
+
 
             SupportActionBar.SetDisplayHomeAsUpEnabled(false);
             SupportActionBar.SetHomeButtonEnabled(false);
