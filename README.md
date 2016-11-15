@@ -36,6 +36,13 @@ You MUST set your Target version to API 23+ and Compile against API 23+:
 ### iOS Specific
 When building against the iOS 10 SDK (Xcode 8) please be aware of the platform privacy changes. Based on what permissions you are using, you must add information into your info.plist. Please read the [following blog for more information](https://blog.xamarin.com/new-ios-10-privacy-permission-settings/). 
 
+Due to API usage it is required to add the Calendar permission :(
+
+<key>NSCalendarsUsageDescription</key>
+<string>Needs Calendar Permission</string>
+
+Even though your app may not use calendar at all. I am looking into a workaround for this in the future.
+
 
 ### API Usage
 
