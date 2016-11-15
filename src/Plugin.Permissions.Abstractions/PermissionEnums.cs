@@ -1,4 +1,4 @@
-﻿namespace Plugin.Permissions.Abstractions
+namespace Plugin.Permissions.Abstractions
 {
     /// <summary>
     /// Status of a permission
@@ -105,6 +105,12 @@
         /// iOS: Speech
         /// UWP: None
         /// </summary>
-        Speech
+        Speech,
+        /// <summary>
+        /// Android: None
+        /// iOS: MPMediaLibrary
+        /// UWP: unknown
+        /// </summary>
+        MediaLib
     }
 }

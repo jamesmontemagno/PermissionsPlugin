@@ -11,6 +11,7 @@ using EventKit;
 using UIKit;
 using Photos;
 using System.Diagnostics;
+using MediaPlayer;
 using Speech;
 
 namespace Plugin.Permissions
@@ -72,6 +73,8 @@ namespace Plugin.Permissions
                 //    break;
                 case Permission.Photos:
                     return Task.FromResult(PhotosPermissionStatus);
+                case Permission.MediaLib:
+                    return Task.FromResult(MediaLibraryPermissionStatus);
                 case Permission.Reminders:
                     return Task.FromResult(GetEventPermissionStatus(EKEntityType.Reminder));
                 case Permission.Sensors:
@@ -132,6 +135,9 @@ namespace Plugin.Permissions
                         break;
                     case Permission.Photos:
                         results.Add(permission, await RequestPhotosPermission().ConfigureAwait(false));
+                        break;
+                    case Permission.MediaLib:
+                        results.Add(permission, await RequestMediaLibraryPermission().ConfigureAwait(false));
                         break;
                     case Permission.Reminders:
                         results.Add(permission, await RequestEventPermission(EKEntityType.Reminder).ConfigureAwait(false));
@@ -490,6 +496,60 @@ namespace Plugin.Permissions
         }
         #endregion
 
+
+        #region MediaLib
+        PermissionStatus MediaLibraryPermissionStatus
+        {
+            get
+            {
+                var status = MPMediaLibrary.AuthorizationStatus;
+                switch (status)
+                {
+                    case MPMediaLibraryAuthorizationStatus.Authorized:
+                        return PermissionStatus.Granted;
+                    case MPMediaLibraryAuthorizationStatus.Denied:
+                        return PermissionStatus.Denied;
+                    case MPMediaLibraryAuthorizationStatus.Restricted:
+                        return PermissionStatus.Restricted;
+                    default:
+                        return PermissionStatus.Unknown;
+                }
+            }
+        }
+
+        Task<PermissionStatus> RequestMediaLibraryPermission()
+        {
+
+            if (MediaLibraryPermissionStatus != PermissionStatus.Unknown)
+                return Task.FromResult(MediaLibraryPermissionStatus);
+
+            var tcs = new TaskCompletionSource<PermissionStatus>();
+
+            MPMediaLibrary.RequestAuthorization(status =>
+            {
+                switch (status)
+                {
+                    case MPMediaLibraryAuthorizationStatus.Authorized:
+                        tcs.SetResult(PermissionStatus.Granted);
+                        break;
+                    case MPMediaLibraryAuthorizationStatus.Denied:
+                        tcs.SetResult(PermissionStatus.Denied);
+                        break;
+                    case MPMediaLibraryAuthorizationStatus.Restricted:
+                        tcs.SetResult(PermissionStatus.Restricted);
+                        break;
+                    default:
+                        tcs.SetResult(PermissionStatus.Unknown);
+                        break;
+                }
+            });
+
+            return tcs.Task;
+        }
+
+        #endregion
+
+
         public bool OpenAppSettings()
         {
             //Opening settings only open in iOS 8+
@@ -506,5 +566,7 @@ namespace Plugin.Permissions
                 return false;
             }
         }
+
+
     }
 }
