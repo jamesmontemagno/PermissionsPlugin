@@ -17,8 +17,10 @@ Want to read about the creation, checkout my [in-depth blog post](http://motzcod
 |Windows Phone Silverlight|---|8.0+|
 |Windows Phone RT|---|8.1+|
 |Windows Store RT|---|8.1+|
-|Windows 10 UWP|---|10+|
+|Windows 10 UWP|Yes*|10+|
 |Xamarin.Mac|No||
+
+*See platform notes below
 
 Build Status: [![Build status](https://ci.appveyor.com/api/projects/status/n0vn5715cx5f7rpy?svg=true)](https://ci.appveyor.com/project/JamesMontemagno/permissionsplugin)
 
@@ -128,69 +130,89 @@ public enum Permission
     /// <summary>
     /// Android: Calendar
     /// iOS: Calendar (Events)
+    /// UWP: None
     /// </summary>
     Calendar,
     /// <summary>
     /// Android: Camera
     /// iOS: Photos (Camera Roll and Camera)
+    /// UWP: None
     /// </summary>
     Camera,
     /// <summary>
     /// Android: Contacts
     /// iOS: AddressBook
+    /// UWP: ContactManager
     /// </summary>
     Contacts,
     /// <summary>
     /// Android: Fine and Coarse Location
     /// iOS: CoreLocation (Always and WhenInUse)
+    /// UWP: Geolocator
     /// </summary>
     Location,
     /// <summary>
     /// Android: Microphone
     /// iOS: Microphone
+    /// UWP: None
     /// </summary>
     Microphone,
     /// <summary>
     /// Android: Phone
     /// iOS: Nothing
+    /// UWP: None
     /// </summary>
     Phone,
     /// <summary>
     /// Android: Nothing
     /// iOS: Photos
+    /// UWP: None
     /// </summary>
     Photos,
     /// <summary>
     /// Android: Nothing
     /// iOS: Reminders
+    /// UWP: None
     /// </summary>
     Reminders,
     /// <summary>
     /// Android: Body Sensors
     /// iOS: CoreMotion
+    /// UWP: Device Access Sensor Class
     /// </summary>
     Sensors,
     /// <summary>
     /// Android: Sms
     /// iOS: Nothing
+    /// UWP: None
     /// </summary>
     Sms,
     /// <summary>
     /// Android: External Storage
     /// iOS: Nothing
+    /// UWP: None
     /// </summary>
     Storage
+    /// <summary>
+    /// Android: Microphone
+    /// iOS: Speech
+    /// UWP: None
+    /// </summary>
+    Speech
 }
 ```
 Read more about android permissions: http://developer.android.com/guide/topics/security/permissions.html#normal-dangerous
 
 
-### **IMPORTANT**
-**Android:**
+### IMPORTANT
+#### Android:
 
 You still need to request the permissions in your AndroidManifest.xml. Also ensure your MainApplication.cs was setup correctly from the CurrentActivity Plugin.
 
-**All Windows Platforms**
+#### Windows 10 UWP
+UWP has a limited set of supported permissions. You can see the documentation above, but current support: Contacts, Location, and Sensors.
+
+#### All other Windows Platforms**
 
 These contain blank implementation and just return Granted status.
 
