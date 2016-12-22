@@ -278,10 +278,10 @@ namespace Plugin.Permissions
 
 
             var info = NSBundle.MainBundle.InfoDictionary;
-            if (info.ContainsKey(new NSString("NSLocationWhenInUseUsageDescription")))
-                locationManager.RequestWhenInUseAuthorization();
-            else if (info.ContainsKey(new NSString("NSLocationAlwaysUsageDescription")))
+            if (info.ContainsKey(new NSString("NSLocationAlwaysUsageDescription")))
                 locationManager.RequestAlwaysAuthorization();
+            else if (info.ContainsKey(new NSString("NSLocationWhenInUseUsageDescription")))
+                locationManager.RequestWhenInUseAuthorization();
             else
                 throw new UnauthorizedAccessException("On iOS 8.0 and higher you must set either NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in your Info.plist file to enable Authorization Requests for Location updates!");
 
