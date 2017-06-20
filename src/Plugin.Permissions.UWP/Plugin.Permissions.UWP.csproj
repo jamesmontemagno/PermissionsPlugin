@@ -109,18 +109,18 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Plugin.Permissions.WindowsPhone81\PermissionsImplementation.cs">
-      <Link>PermissionsImplementation.cs</Link>
-    </Compile>
     <Compile Include="..\Plugin.Permissions\CrossPermissions.cs">
       <Link>CrossPermissions.cs</Link>
     </Compile>
+    <Compile Include="PermissionsImplementation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="Properties\Plugin.Permissions.UWP.rd.xml" />
+    <EmbeddedResource Include="Properties\Plugin.Permissions.rd.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Plugin.Permissions.Abstractions\Plugin.Permissions.Abstractions.csproj">
-      <Project>{6edb0588-ffc5-4ef5-8a99-9e241d0f878d}</Project>
+      <Project>{61381acd-0ac7-4534-9e53-f21900c246b8}</Project>
       <Name>Plugin.Permissions.Abstractions</Name>
     </ProjectReference>
   </ItemGroup>

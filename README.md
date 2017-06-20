@@ -11,15 +11,11 @@ Want to read about the creation, checkout my [in-depth blog post](http://motzcod
 
 **Platform Support**
 
-|Platform|Supported|Version|
+|Platform|Version|
 | ------------------- | :-----------: | :------------------: |
-|Xamarin.iOS|Yes|iOS 7+|
-|Xamarin.Android|Yes|API 14+|
-|Windows Phone Silverlight|---|8.0+|
-|Windows Phone RT|---|8.1+|
-|Windows Store RT|---|8.1+|
-|Windows 10 UWP|Yes*|10+|
-|Xamarin.Mac|No||
+|Xamarin.iOS|iOS 7+|
+|Xamarin.Android|API 14+|
+|Windows 10 UWP(Beta)|10+|
 
 *See platform notes below
 
@@ -33,8 +29,7 @@ public override void OnRequestPermissionsResult(int requestCode, string[] permis
 }
 ```
 
-You MUST set your Target version to API 23+ and Compile against API 23+:
-![image](https://cloud.githubusercontent.com/assets/1676321/17110560/7279341c-5252-11e6-89be-8c10b38c0ea6.png)
+You MUST set your Target version to API 24+ and Compile against API 24+:
 
 ### iOS Specific
 When building against the iOS 10 SDK (Xcode 8) please be aware of the platform privacy changes. Based on what permissions you are using, you must add information into your info.plist. Please read the [following blog for more information](https://blog.xamarin.com/new-ios-10-privacy-permission-settings/). 
@@ -212,10 +207,6 @@ You still need to request the permissions in your AndroidManifest.xml. Also ensu
 
 #### Windows 10 UWP
 UWP has a limited set of supported permissions. You can see the documentation above, but current support: Contacts, Location, and Sensors.
-
-#### All other Windows Platforms**
-
-These contain blank implementation and just return Granted status.
 
 #### Contributors
 * Icon thanks to [Jérémie Laval](https://github.com/garuma)

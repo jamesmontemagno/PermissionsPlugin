@@ -28,7 +28,7 @@ namespace Plugin.Permissions
 
         static IPermissions CreatePermissions()
         {
-#if PORTABLE
+#if NETSTANDARD1_0
             return null;
 #else
             return new PermissionsImplementation();
