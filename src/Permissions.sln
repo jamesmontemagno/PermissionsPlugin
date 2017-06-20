@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.Permissions.Android"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6ADEFD4F-ED2E-42A3-A4E5-D34A29AF1F1F}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\Productivity\.editorconfig = ..\..\Productivity\.editorconfig
+		..\.editorconfig = ..\.editorconfig
 		..\appveyor.yml = ..\appveyor.yml
 		..\build.cake = ..\build.cake
 		..\nuget\plugin.nuspec = ..\nuget\plugin.nuspec

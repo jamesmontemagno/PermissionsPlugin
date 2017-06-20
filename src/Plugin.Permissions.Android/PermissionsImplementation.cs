@@ -27,10 +27,8 @@ namespace Plugin.Permissions
         /// <summary>
         /// Current Permissions Implementation
         /// </summary>
-        public static PermissionsImplementation Current
-        {
-            get {  return (PermissionsImplementation)CrossPermissions.Current; }
-        }
+        public static PermissionsImplementation Current =>
+			(PermissionsImplementation)CrossPermissions.Current; 
 
         /// <summary>
         /// Request to see if you should show a rationale for requesting permission
@@ -175,12 +173,12 @@ namespace Plugin.Permissions
 
             tcs = new TaskCompletionSource<Dictionary<Permission, PermissionStatus>>();
 
-            ActivityCompat.RequestPermissions(activity, permissionsToRequest.ToArray(), PermissionCode);
+            ActivityCompat.RequestPermissions(activity, permissionsToRequest.ToArray(), permissioncode);
 
             return await tcs.Task.ConfigureAwait(false);
         }
 
-        const int PermissionCode = 25;
+        const int permissioncode = 25;
         /// <summary>
         /// Callback that must be set when request permissions has finished
         /// </summary>
@@ -189,7 +187,7 @@ namespace Plugin.Permissions
         /// <param name="grantResults"></param>
         public void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
         {
-            if (requestCode != PermissionCode)
+            if (requestCode != permissioncode)
                 return;
 
             if (tcs == null)
@@ -381,7 +379,7 @@ namespace Plugin.Permissions
                     return requestedPermissions.Any(r => r.Equals(permission, StringComparison.InvariantCultureIgnoreCase));
 
                 //try to use current activity else application context
-                Context context = CrossCurrentActivity.Current.Activity ?? Application.Context;
+                var context = CrossCurrentActivity.Current.Activity ?? Application.Context;
 
                 if (context == null)
                 {
@@ -414,6 +412,10 @@ namespace Plugin.Permissions
             return false;
         }
 
+		/// <summary>
+		/// Opens settings to app page
+		/// </summary>
+		/// <returns>true if could open.</returns>
         public bool OpenAppSettings()
         {
 
