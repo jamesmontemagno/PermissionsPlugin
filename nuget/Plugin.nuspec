@@ -60,7 +60,7 @@
     <file src="src\Plugin.Permissions.Android\bin\Release\Plugin.Permissions.*" target="lib\MonoAndroid70" />
 
     <!--Xamarin.iOS-->
-    <file src="src\Plugin.Permissions.iOSUnified\bin\iPhone\Release\Plugin.Permissions.*" target="lib\Xamarin.iOS10" />
+    <file src="src\Plugin.Permissions.iOS\bin\iPhone\Release\Plugin.Permissions.*" target="lib\Xamarin.iOS10" />
 
     <!--UWP-->
     <file src="src\Plugin.Permissions.UWP\bin\Release\Plugin.Permissions.*" target="lib\UAP10" />
