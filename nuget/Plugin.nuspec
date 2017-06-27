@@ -28,7 +28,7 @@
       <group targetFramework="netstandard1.0">
         <dependency id="NETStandard.Library" version="1.6.1" />
       </group>
-      <group targetFramework="MonoAndroid70">
+      <group targetFramework="MonoAndroid10">
         <dependency id="Xamarin.Android.Support.Compat" version="25.3.1"/>
         <dependency id="Plugin.CurrentActivity" version="1.0.1"/>
       </group>
@@ -57,7 +57,7 @@
     <file src="src\Plugin.Permissions\bin\Release\netstandard1.0\Plugin.Permissions.*" target="lib\netstandard1.0" />
 
     <!--Xamarin.Android-->
-    <file src="src\Plugin.Permissions.Android\bin\Release\Plugin.Permissions.*" target="lib\MonoAndroid70" />
+    <file src="src\Plugin.Permissions.Android\bin\Release\Plugin.Permissions.*" target="lib\MonoAndroid10" />
 
     <!--Xamarin.iOS-->
     <file src="src\Plugin.Permissions.iOS\bin\iPhone\Release\Plugin.Permissions.*" target="lib\Xamarin.iOS10" />
