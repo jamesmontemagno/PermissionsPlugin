@@ -1,3 +1,7 @@
+### 2.0.0
+* Re-target .NET Standard
+* Dependent on Android 25.3.1 Support Libraries
+
 ### 1.2.0
 * Add microphone permission
 * Initial UWP permissions
