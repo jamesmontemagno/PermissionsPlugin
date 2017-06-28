@@ -10,10 +10,10 @@ namespace Plugin.Permissions
     {
         static Lazy<IPermissions> Implementation = new Lazy<IPermissions>(CreatePermissions, System.Threading.LazyThreadSafetyMode.PublicationOnly);
 
-        /// <summary>
-        /// Current settings to use
-        /// </summary>
-        public static IPermissions Current
+		/// <summary>
+		/// Current settings to use
+		/// </summary>
+		public static IPermissions Current
         {
             get
             {
@@ -22,8 +22,13 @@ namespace Plugin.Permissions
                 {
                     throw NotImplementedInReferenceAssembly();
                 }
-                return ret;
+				return ret;
             }
+
+			set
+			{
+				Implementation = new Lazy<IPermissions>(() => value);
+			}
         }
 
         static IPermissions CreatePermissions()
