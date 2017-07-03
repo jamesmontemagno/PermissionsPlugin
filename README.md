@@ -12,7 +12,7 @@ Want to read about the creation, checkout my [in-depth blog post](http://motzcod
 **Platform Support**
 
 |Platform|Version|
-| ------------------- | :-----------: | :------------------: |
+| ------------------- | :-----------: |
 |Xamarin.iOS|iOS 7+|
 |Xamarin.Android|API 14+|
 |Windows 10 UWP(Beta)|10+|
@@ -91,8 +91,10 @@ try
             await DisplayAlert("Need location", "Gunna need that location", "OK");
         }
 
-        var results = await CrossPermissions.Current.RequestPermissionsAsync(new[] {Permission.Location});
-        status = results[Permission.Location];
+        var results = await CrossPermissions.Current.RequestPermissionsAsync(Permission.Location);
+		//Best practice to always check that the key exists
+		if(results.ContainsKey(Permission.Location))
+        	status = results[Permission.Location];
     }
 
     if (status == PermissionStatus.Granted)
