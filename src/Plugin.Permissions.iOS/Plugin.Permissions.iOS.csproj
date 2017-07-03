@@ -40,16 +40,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Plugin.Permissions.Abstractions\Plugin.Permissions.Abstractions.csproj">
-      <Project>{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D}</Project>
-      <Name>Plugin.Permissions.Abstractions</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Plugin.Permissions.Abstractions\Plugin.Permissions.Abstractions.csproj">
+      <Project>{d137da3a-7bf2-476b-a4c5-8c2d0653397f}</Project>
+      <Name>Plugin.Permissions.Abstractions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Plugin.Permissions.Shared\Plugin.Permissions.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

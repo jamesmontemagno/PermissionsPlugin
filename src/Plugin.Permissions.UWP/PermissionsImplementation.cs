@@ -3,11 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-#if WINDOWS_UWP
 using Windows.Devices.Geolocation;
 using Windows.ApplicationModel.Contacts;
 using Windows.Devices.Enumeration;
-#endif
+
 
 namespace Plugin.Permissions
 {
@@ -16,19 +15,14 @@ namespace Plugin.Permissions
     /// </summary>
     public class PermissionsImplementation : IPermissions
     {
-#if WINDOWS_UWP
         Guid ActivitySensorClassId = new Guid("9D9E0118-1807-4F2E-96E4-2CE57142E196");
-#endif
         /// <summary>
         /// Request to see if you should show a rationale for requesting permission
         /// Only on Android
         /// </summary>
         /// <returns>True or false to show rationale</returns>
         /// <param name="permission">Permission to check.</param>
-        public Task<bool> ShouldShowRequestPermissionRationaleAsync(Permission permission)
-        {
-            return Task.FromResult(false);
-        }
+        public Task<bool> ShouldShowRequestPermissionRationaleAsync(Permission permission) => Task.FromResult(false);
 
         /// <summary>
         /// Determines whether this instance has permission the specified permission.
@@ -49,10 +43,6 @@ namespace Plugin.Permissions
                     return CheckLocationAsync();
                 case Permission.Microphone:
                     break;
-                //case Permission.NotificationsLocal:
-                //    break;
-                //case Permission.NotificationsRemote:
-                //    break;
                 case Permission.Phone:
                     break;
                 case Permission.Photos:
@@ -61,7 +51,6 @@ namespace Plugin.Permissions
                     break;
                 case Permission.Sensors:
                     {
-#if WINDOWS_UWP
                         // Determine if the user has allowed access to activity sensors
                         var deviceAccessInfo = DeviceAccessInformation.CreateFromDeviceClassId(ActivitySensorClassId);
                         switch(deviceAccessInfo.CurrentStatus)
@@ -74,9 +63,7 @@ namespace Plugin.Permissions
                             default:
                                 return Task.FromResult(PermissionStatus.Unknown);
                         }
-#endif
                     }
-                 break;
                 case Permission.Sms:
                     break;
                 case Permission.Storage:
@@ -89,21 +76,18 @@ namespace Plugin.Permissions
 
         private async Task<PermissionStatus> CheckContactsAsync()
         {
-#if WINDOWS_UWP
+
             var accessStatus = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
 
             if (accessStatus == null)
                 return PermissionStatus.Denied;
 
             return PermissionStatus.Granted;
-#endif
-
-            return PermissionStatus.Granted;
         }
 
         private async Task<PermissionStatus> CheckLocationAsync()
         {
-#if WINDOWS_UWP
+
             var accessStatus = await Geolocator.RequestAccessAsync();
 
             switch(accessStatus)
@@ -116,9 +100,6 @@ namespace Plugin.Permissions
             }
 
             return PermissionStatus.Denied;
-#endif
-
-            return PermissionStatus.Granted;
         }
 
         /// <summary>
@@ -132,9 +113,6 @@ namespace Plugin.Permissions
             return Task.FromResult(results);
         }
 
-        public bool OpenAppSettings()
-        {
-            return false;
-        }
+        public bool OpenAppSettings() => false;
     }
 }

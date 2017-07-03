@@ -7,10 +7,6 @@ var libraries = new Dictionary<string, string> {
  	{ "./src/Permissions.sln", "Any" },
 };
 
-var samples = new Dictionary<string, string> {
-	{ "./samples/PermissionsSample.sln", "Win" },
-};
-
 var BuildAction = new Action<Dictionary<string, string>> (solutions =>
 {
 
@@ -59,15 +55,9 @@ Task("Libraries").Does(()=>
     BuildAction(libraries);
 });
 
-Task("Samples")
-    .IsDependentOn("Libraries")
-    .Does(()=>
-{
-    //BuildAction(samples);
-});
 
 Task ("NuGet")
-	.IsDependentOn ("Samples")
+	.IsDependentOn ("Libraries")
 	.Does (() =>
 {
     if(!DirectoryExists("./Build/nuget/"))
@@ -82,16 +72,9 @@ Task ("NuGet")
 	});	
 });
 
-Task("Component")
-    .IsDependentOn("Samples")
-    .IsDependentOn("NuGet")
-    .Does(()=>
-{
-
-});
 
 //Build the component, which build samples, nugets, and libraries
-Task ("Default").IsDependentOn("Component");
+Task ("Default").IsDependentOn("NuGet");
 
 
 Task ("Clean").Does (() => 
