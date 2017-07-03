@@ -2,6 +2,10 @@ Permissions Readme
 
 You can find a full change log here: https://github.com/jamesmontemagno/PermissionsPlugin/blob/master/CHANGELOG.md
 
+## News
+- Plugins have moved to .NET Standard and have some important changes! Please read my blog:
+http://motzcod.es/post/162402194007/plugins-for-xamarin-go-dotnet-standard
+
 **IMPORTANT**
 Android:
 You must set your app to compile against API 25 or higher. It is required that you add the following override to any Activity that you will be requesting permissions from:
