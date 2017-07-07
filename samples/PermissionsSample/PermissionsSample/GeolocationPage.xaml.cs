@@ -64,7 +64,9 @@ namespace PermissionsSample
                     break;
                 case "Settings":
                     CrossPermissions.Current.OpenAppSettings();
-                    return;
+					((Button)sender).IsEnabled = true;
+					busy = false;
+					return;
             }
 
             await DisplayAlert("Pre - Results", status.ToString(), "OK");
