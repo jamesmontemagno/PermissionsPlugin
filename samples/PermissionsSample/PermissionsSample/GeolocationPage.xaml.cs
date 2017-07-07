@@ -134,7 +134,7 @@ namespace PermissionsSample
 
                 if (status == PermissionStatus.Granted)
                 {
-                    var results = await CrossGeolocator.Current.GetPositionAsync(10000);
+                    var results = await CrossGeolocator.Current.GetPositionAsync(TimeSpan.FromSeconds(10));
                     LabelGeolocation.Text = "Lat: " + results.Latitude + " Long: " + results.Longitude;
                 }
                 else if(status != PermissionStatus.Unknown)

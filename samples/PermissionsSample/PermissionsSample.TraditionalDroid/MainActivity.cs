@@ -13,10 +13,7 @@ namespace PermissionsSample.TraditionalDroid
     public class MainActivity : BaseActivity
     {
 
-        protected override int LayoutResource
-        {
-            get { return Resource.Layout.main; }
-        }
+        protected override int LayoutResource => Resource.Layout.main; 
         int count = 1;
 
         protected override void OnCreate(Bundle bundle)
@@ -29,9 +26,11 @@ namespace PermissionsSample.TraditionalDroid
 
             clickButton.Click += async (sender, args) =>
               {
-                  try
+				  clickButton.Enabled = false;
+
+				  try
                   {
-                      var location = await CrossGeolocator.Current.GetPositionAsync(10000);
+                      var location = await CrossGeolocator.Current.GetPositionAsync(TimeSpan.FromSeconds(10));
                       Toast.MakeText(this, $"{location.Latitude}", ToastLength.Long).Show();
                   }
                   catch
@@ -39,7 +38,9 @@ namespace PermissionsSample.TraditionalDroid
                       Toast.MakeText(this, "error", ToastLength.Short).Show();
                   }
 
-                  clickButton.Text = string.Format("{0} clicks!", count++);
+				  clickButton.Enabled = true;
+
+				  clickButton.Text = string.Format("{0} clicks!", count++);
               };
 
             var navigationButton = FindViewById<Button>(Resource.Id.nav_button);

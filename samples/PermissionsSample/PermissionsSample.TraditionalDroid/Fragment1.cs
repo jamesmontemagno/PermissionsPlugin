@@ -46,7 +46,7 @@ namespace PermissionsSample.TraditionalDroid
             {
                 try
                 {
-                    var location = await CrossGeolocator.Current.GetPositionAsync(10000);
+                    var location = await CrossGeolocator.Current.GetPositionAsync(TimeSpan.FromSeconds(10));
                     Toast.MakeText(Activity, $"{location.Latitude}", ToastLength.Long).Show();
                 }
                 catch
