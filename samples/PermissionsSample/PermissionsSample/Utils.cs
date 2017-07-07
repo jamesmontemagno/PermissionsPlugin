@@ -11,7 +11,7 @@ namespace PermissionsSample
 {
 	public static class Utils
 	{
-		public static async Task<bool> CheckPermissions(Permission permission)
+		public static async Task<PermissionStatus> CheckPermissions(Permission permission)
 		{
 			var permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(permission);
 			bool request = false;
@@ -26,7 +26,7 @@ namespace PermissionsSample
 					var negative = "Maybe Later";
 					var task = Application.Current?.MainPage?.DisplayAlert(title, question, positive, negative);
 					if (task == null)
-						return false;
+						return permissionStatus;
 
 					var result = await task;
 					if (result)
@@ -34,7 +34,7 @@ namespace PermissionsSample
 						CrossPermissions.Current.OpenAppSettings();
 					}
 
-					return false;
+					return permissionStatus;
 				}
 
 				request = true;
@@ -44,26 +44,30 @@ namespace PermissionsSample
 			if (request || permissionStatus != PermissionStatus.Granted)
 			{
 				var newStatus = await CrossPermissions.Current.RequestPermissionsAsync(permission);
+
+				permissionStatus = newStatus[permission];
+
 				if (newStatus.ContainsKey(permission) && newStatus[permission] != PermissionStatus.Granted)
 				{
+					permissionStatus = newStatus[permission];
 					var title = $"{permission} Permission";
 					var question = $"To use the plugin the {permission} permission is required.";
 					var positive = "Settings";
 					var negative = "Maybe Later";
 					var task = Application.Current?.MainPage?.DisplayAlert(title, question, positive, negative);
 					if (task == null)
-						return false;
+						return permissionStatus;
 
 					var result = await task;
 					if (result)
 					{
 						CrossPermissions.Current.OpenAppSettings();
 					}
-					return false;
+					return permissionStatus;
 				}
 			}
 
-			return true;
+			return permissionStatus;
 		}
 	}
 }
