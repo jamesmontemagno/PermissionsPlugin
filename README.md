@@ -23,8 +23,9 @@ Build Status: [![Build status](https://ci.appveyor.com/api/projects/status/n0vn5
 
 ### Android specific in your BaseActivity or MainActivity (for Xamarin.Forms) add this code:
 ```csharp
-public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
 {
+    base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
     PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 }
 ```
