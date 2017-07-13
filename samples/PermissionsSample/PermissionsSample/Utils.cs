@@ -44,10 +44,15 @@ namespace PermissionsSample
 			if (request || permissionStatus != PermissionStatus.Granted)
 			{
 				var newStatus = await CrossPermissions.Current.RequestPermissionsAsync(permission);
+				
+				if (!newStatus.ContainsKey(permission))
+				{
+					return permissionStatus;					
+				}
 
 				permissionStatus = newStatus[permission];
 
-				if (newStatus.ContainsKey(permission) && newStatus[permission] != PermissionStatus.Granted)
+				if (newStatus[permission] != PermissionStatus.Granted)
 				{
 					permissionStatus = newStatus[permission];
 					var title = $"{permission} Permission";
