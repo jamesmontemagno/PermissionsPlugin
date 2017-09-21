@@ -13,7 +13,7 @@ Want to read about the creation, checkout my [in-depth blog post](http://motzcod
 
 |Platform|Version|
 | ------------------- | :-----------: |
-|Xamarin.iOS|iOS 7+|
+|Xamarin.iOS|iOS 8+|
 |Xamarin.Android|API 14+|
 |Windows 10 UWP(Beta)|10+|
 
@@ -30,7 +30,7 @@ public override void OnRequestPermissionsResult(int requestCode, string[] permis
 }
 ```
 
-You MUST set your Target version to API 24+ and Compile against API 24+:
+You MUST set your Target version to API 25+ and Compile against API 25+:
 
 ### iOS Specific
 When building against the iOS 10 SDK (Xcode 8) please be aware of the platform privacy changes. Based on what permissions you are using, you must add information into your info.plist. Please read the [following blog for more information](https://blog.xamarin.com/new-ios-10-privacy-permission-settings/). 
