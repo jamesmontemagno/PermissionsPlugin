@@ -60,12 +60,24 @@
         /// UWP: Geolocator
         /// </summary>
         Location,
-        /// <summary>
-        /// Android: Microphone
-        /// iOS: Microphone
-        /// UWP: None
-        /// </summary>
-        Microphone,
+		/// <summary>
+		/// Android: Fine and Coarse Location
+		/// iOS: CoreLocation - Always
+		/// UWP: Geolocator
+		/// </summary>
+		LocationAlways,
+		/// <summary>
+		/// Android: Fine and Coarse Location
+		/// iOS: CoreLocation - WhenInUse
+		/// UWP: Geolocator
+		/// </summary>
+		LocationWhenInUse,
+		/// <summary>
+		/// Android: Microphone
+		/// iOS: Microphone
+		/// UWP: None
+		/// </summary>
+		Microphone,
         /// <summary>
         /// Android: Phone
         /// iOS: Nothing

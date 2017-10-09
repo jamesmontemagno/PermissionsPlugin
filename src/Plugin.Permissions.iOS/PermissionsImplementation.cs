@@ -244,49 +244,70 @@ namespace Plugin.Permissions
 
             return results.Item1 ? PermissionStatus.Granted : PermissionStatus.Denied;
         }
-        #endregion
+		#endregion
 
-        #region Location
+		#region Location
 
-        Task<PermissionStatus> RequestLocationPermission()
-        {
+		Task<PermissionStatus> RequestLocationPermission(Permission permission = Permission.Location)
+		{
 
-            if (LocationPermissionStatus != PermissionStatus.Unknown)
-                return Task.FromResult(LocationPermissionStatus);
+			if (LocationPermissionStatus != PermissionStatus.Unknown)
+				return Task.FromResult(LocationPermissionStatus);
 
-            if (!UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
-            {
-                return Task.FromResult(PermissionStatus.Unknown);
-            }
+			if (!UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
+			{
+				return Task.FromResult(PermissionStatus.Unknown);
+			}
 
-            if (locationManager == null)
-                locationManager = new CLLocationManager();
+			if (locationManager == null)
+				locationManager = new CLLocationManager();
 
-            EventHandler<CLAuthorizationChangedEventArgs> authCallback = null;
-            var tcs = new TaskCompletionSource<PermissionStatus>();
+			EventHandler<CLAuthorizationChangedEventArgs> authCallback = null;
+			var tcs = new TaskCompletionSource<PermissionStatus>();
 
-            authCallback = (sender, e) =>
-                {
-                    if(e.Status == CLAuthorizationStatus.NotDetermined)
-                        return;
+			authCallback = (sender, e) =>
+				{
+					if (e.Status == CLAuthorizationStatus.NotDetermined)
+						return;
 
-                    locationManager.AuthorizationChanged -= authCallback;
-                    tcs.SetResult(LocationPermissionStatus);
-                };
+					locationManager.AuthorizationChanged -= authCallback;
+					tcs.SetResult(LocationPermissionStatus);
+				};
 
-            locationManager.AuthorizationChanged += authCallback;
-
-
-            var info = NSBundle.MainBundle.InfoDictionary;
-            if (info.ContainsKey(new NSString("NSLocationAlwaysUsageDescription")))
-                locationManager.RequestAlwaysAuthorization();
-            else if (info.ContainsKey(new NSString("NSLocationWhenInUseUsageDescription")))
-                locationManager.RequestWhenInUseAuthorization();
-            else
-                throw new UnauthorizedAccessException("On iOS 8.0 and higher you must set either NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in your Info.plist file to enable Authorization Requests for Location updates!");
+			locationManager.AuthorizationChanged += authCallback;
 
 
-            return tcs.Task;
+			var info = NSBundle.MainBundle.InfoDictionary;
+
+
+			if (permission == Permission.Location)
+			{
+				if (info.ContainsKey(new NSString("NSLocationAlwaysUsageDescription")))
+					locationManager.RequestAlwaysAuthorization();
+				else if (info.ContainsKey(new NSString("NSLocationWhenInUseUsageDescription")))
+					locationManager.RequestWhenInUseAuthorization();
+				else
+					throw new UnauthorizedAccessException("On iOS 8.0 and higher you must set either NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in your Info.plist file to enable Authorization Requests for Location updates!");
+			}
+			else if (permission == Permission.LocationAlways)
+			{
+				if (info.ContainsKey(new NSString("NSLocationAlwaysUsageDescription")))
+					locationManager.RequestAlwaysAuthorization();
+				else
+					throw new UnauthorizedAccessException("On iOS 8.0 and higher you must set either NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in your Info.plist file to enable Authorization Requests for Location updates!");
+
+			}
+			else if (permission == Permission.LocationWhenInUse)
+			{
+				if (info.ContainsKey(new NSString("NSLocationWhenInUseUsageDescription")))
+					locationManager.RequestWhenInUseAuthorization();
+				else
+					throw new UnauthorizedAccessException("On iOS 8.0 and higher you must set either NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in your Info.plist file to enable Authorization Requests for Location updates!");
+
+			}
+
+
+			return tcs.Task;
         }
 
         PermissionStatus LocationPermissionStatus

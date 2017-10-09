@@ -40,6 +40,8 @@ namespace Plugin.Permissions
                 case Permission.Contacts:
                     return CheckContactsAsync();
                 case Permission.Location:
+				case Permission.LocationAlways:
+				case Permission.LocationWhenInUse:
                     return CheckLocationAsync();
                 case Permission.Microphone:
                     break;

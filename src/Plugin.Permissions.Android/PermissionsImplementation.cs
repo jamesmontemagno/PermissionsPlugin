@@ -209,6 +209,7 @@ namespace Plugin.Permissions
                         if (!results.ContainsKey(Permission.Speech))
                             results.Add(Permission.Speech, grantResults[i] == Android.Content.PM.Permission.Granted ? PermissionStatus.Granted : PermissionStatus.Denied);
                     }
+
                     if (!results.ContainsKey(permission))
                         results.Add(permission, grantResults[i] == Android.Content.PM.Permission.Granted ? PermissionStatus.Granted : PermissionStatus.Denied);
                 }
@@ -289,6 +290,8 @@ namespace Plugin.Permissions
                             permissionNames.Add(Manifest.Permission.GetAccounts);
                     }
                     break;
+                case Permission.LocationAlways:
+                case Permission.LocationWhenInUse:
                 case Permission.Location:
                     {
                         if(HasPermissionInManifest(Manifest.Permission.AccessCoarseLocation))
