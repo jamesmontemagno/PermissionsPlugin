@@ -61,18 +61,6 @@
         /// </summary>
         Location,
 		/// <summary>
-		/// Android: Fine and Coarse Location
-		/// iOS: CoreLocation - Always
-		/// UWP: Geolocator
-		/// </summary>
-		LocationAlways,
-		/// <summary>
-		/// Android: Fine and Coarse Location
-		/// iOS: CoreLocation - WhenInUse
-		/// UWP: Geolocator
-		/// </summary>
-		LocationWhenInUse,
-		/// <summary>
 		/// Android: Microphone
 		/// iOS: Microphone
 		/// UWP: None
@@ -117,6 +105,18 @@
         /// iOS: Speech
         /// UWP: None
         /// </summary>
-        Speech
-    }
+        Speech,
+		/// <summary>
+		/// Android: Fine and Coarse Location
+		/// iOS: CoreLocation - Always
+		/// UWP: Geolocator
+		/// </summary>
+		LocationAlways,
+		/// <summary>
+		/// Android: Fine and Coarse Location
+		/// iOS: CoreLocation - WhenInUse
+		/// UWP: Geolocator
+		/// </summary>
+		LocationWhenInUse,
+	}
 }

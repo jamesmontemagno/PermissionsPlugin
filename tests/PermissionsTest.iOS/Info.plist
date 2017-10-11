@@ -49,7 +49,13 @@
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Can I haz location?</string>
+	<string>Need location when in use</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Always and when in use!</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Older devices need location.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Can I haz location always?</string>
 	<key>CFBundleName</key>
 	<string>PermissionsTest</string>
 	<key>NSAppleMusicUsageDescription</key>

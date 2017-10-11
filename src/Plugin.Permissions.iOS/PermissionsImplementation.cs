@@ -63,7 +63,9 @@ namespace Plugin.Permissions
                 case Permission.Contacts:
                     return Task.FromResult(ContactsPermissionStatus);
                 case Permission.Location:
-                    return Task.FromResult(LocationPermissionStatus);
+				case Permission.LocationAlways:
+				case Permission.LocationWhenInUse:
+                    return Task.FromResult(GetLocationPermissionStatus(permission));
                 case Permission.Microphone:
                     return Task.FromResult(GetAVPermissionStatus(AVMediaType.Audio));
                 //case Permission.NotificationsLocal:
@@ -115,8 +117,10 @@ namespace Plugin.Permissions
                     case Permission.Contacts:
                         results.Add(permission, await RequestContactsPermission().ConfigureAwait(false));
                         break;
+					case Permission.LocationWhenInUse:
+					case Permission.LocationAlways:
                     case Permission.Location:
-                        results.Add(permission, await RequestLocationPermission().ConfigureAwait(false));
+                        results.Add(permission, await RequestLocationPermission(permission).ConfigureAwait(false));
                         break;
                     case Permission.Microphone:
                         try
@@ -198,8 +202,7 @@ namespace Plugin.Permissions
             if (ContactsPermissionStatus != PermissionStatus.Unknown)
                 return Task.FromResult(ContactsPermissionStatus);
 
-            if (addressBook == null)
-                addressBook = new ABAddressBook();
+            addressBook = new ABAddressBook();
 
             var tcs = new TaskCompletionSource<PermissionStatus>();
 
@@ -237,8 +240,7 @@ namespace Plugin.Permissions
             if (GetEventPermissionStatus(eventType) == PermissionStatus.Granted)
                 return PermissionStatus.Granted;
 
-            if (eventStore == null)
-                eventStore = new EKEventStore();
+            eventStore = new EKEventStore();
 
             var results = await eventStore.RequestAccessAsync(eventType).ConfigureAwait(false);
 
@@ -250,17 +252,19 @@ namespace Plugin.Permissions
 
 		Task<PermissionStatus> RequestLocationPermission(Permission permission = Permission.Location)
 		{
-
-			if (LocationPermissionStatus != PermissionStatus.Unknown)
-				return Task.FromResult(LocationPermissionStatus);
+			if(CLLocationManager.Status == CLAuthorizationStatus.AuthorizedWhenInUse && permission == Permission.LocationAlways)
+			{
+				//dont' do anything and request it
+			}
+			else if (GetLocationPermissionStatus(permission) != PermissionStatus.Unknown)
+				return Task.FromResult(GetLocationPermissionStatus(permission));
 
 			if (!UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
 			{
 				return Task.FromResult(PermissionStatus.Unknown);
 			}
 
-			if (locationManager == null)
-				locationManager = new CLLocationManager();
+			locationManager = new CLLocationManager();
 
 			EventHandler<CLAuthorizationChangedEventArgs> authCallback = null;
 			var tcs = new TaskCompletionSource<PermissionStatus>();
@@ -271,7 +275,9 @@ namespace Plugin.Permissions
 						return;
 
 					locationManager.AuthorizationChanged -= authCallback;
-					tcs.SetResult(LocationPermissionStatus);
+
+					tcs.SetResult(GetLocationPermissionStatus(permission));
+					
 				};
 
 			locationManager.AuthorizationChanged += authCallback;
@@ -297,7 +303,7 @@ namespace Plugin.Permissions
 					throw new UnauthorizedAccessException("On iOS 8.0 and higher you must set either NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in your Info.plist file to enable Authorization Requests for Location updates!");
 
 			}
-			else if (permission == Permission.LocationWhenInUse)
+			else
 			{
 				if (info.ContainsKey(new NSString("NSLocationWhenInUseUsageDescription")))
 					locationManager.RequestWhenInUseAuthorization();
@@ -310,44 +316,60 @@ namespace Plugin.Permissions
 			return tcs.Task;
         }
 
-        PermissionStatus LocationPermissionStatus
+        PermissionStatus GetLocationPermissionStatus(Permission permission)
         {
-            get
+            
+            if (!CLLocationManager.LocationServicesEnabled)
+                return PermissionStatus.Disabled;
+
+            var status = CLLocationManager.Status;
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
             {
-                if (!CLLocationManager.LocationServicesEnabled)
-                    return PermissionStatus.Disabled;
+				//if checking for always then check to see if we have it really, else denied
+				if (permission == Permission.LocationAlways)
+				{
+					switch (status)
+					{
+						case CLAuthorizationStatus.AuthorizedAlways:
+							return PermissionStatus.Granted;
+						case CLAuthorizationStatus.AuthorizedWhenInUse:
+						case CLAuthorizationStatus.Denied:
+							return PermissionStatus.Denied;
+						case CLAuthorizationStatus.Restricted:
+							return PermissionStatus.Restricted;
+						default:
+							return PermissionStatus.Unknown;
+					}
+				}
 
-                var status = CLLocationManager.Status;
-
-                if (UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
-                {
-                    switch (status)
-                    {
-                        case CLAuthorizationStatus.AuthorizedAlways:
-                        case CLAuthorizationStatus.AuthorizedWhenInUse:
-                            return PermissionStatus.Granted;
-                        case CLAuthorizationStatus.Denied:
-                                return PermissionStatus.Denied;
-                        case CLAuthorizationStatus.Restricted:
-                            return PermissionStatus.Restricted;
-                        default:
-                            return PermissionStatus.Unknown;
-                    }
-                }
-
-                switch (status)
-                {
-                    case CLAuthorizationStatus.Authorized:
-                        return PermissionStatus.Granted;
-                    case CLAuthorizationStatus.Denied:
-                        return PermissionStatus.Denied;
-                    case CLAuthorizationStatus.Restricted:
-                        return PermissionStatus.Restricted;
-                    default:
-                        return PermissionStatus.Unknown;
-                }
-
+				switch (status)
+				{
+					case CLAuthorizationStatus.AuthorizedAlways:
+					case CLAuthorizationStatus.AuthorizedWhenInUse:
+						return PermissionStatus.Granted;
+					case CLAuthorizationStatus.Denied:
+						return PermissionStatus.Denied;
+					case CLAuthorizationStatus.Restricted:
+						return PermissionStatus.Restricted;
+					default:
+						return PermissionStatus.Unknown;
+				}
             }
+
+            switch (status)
+            {
+                case CLAuthorizationStatus.Authorized:
+                    return PermissionStatus.Granted;
+                case CLAuthorizationStatus.Denied:
+                    return PermissionStatus.Denied;
+                case CLAuthorizationStatus.Restricted:
+                    return PermissionStatus.Restricted;
+                default:
+                    return PermissionStatus.Unknown;
+            }
+
+            
 
         }
         #endregion
@@ -435,8 +457,7 @@ namespace Plugin.Permissions
             if (CMMotionActivityManager.IsActivityAvailable)
                 return PermissionStatus.Granted;
 
-            if (activityManager == null)
-                activityManager = new CMMotionActivityManager();
+            activityManager = new CMMotionActivityManager();
 
             try
             {

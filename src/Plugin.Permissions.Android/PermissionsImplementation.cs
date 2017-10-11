@@ -209,6 +209,14 @@ namespace Plugin.Permissions
                         if (!results.ContainsKey(Permission.Speech))
                             results.Add(Permission.Speech, grantResults[i] == Android.Content.PM.Permission.Granted ? PermissionStatus.Granted : PermissionStatus.Denied);
                     }
+					else if(permission == Permission.Location)
+					{
+						if (!results.ContainsKey(Permission.LocationAlways))
+							results.Add(Permission.LocationAlways, grantResults[i] == Android.Content.PM.Permission.Granted ? PermissionStatus.Granted : PermissionStatus.Denied);
+
+						if (!results.ContainsKey(Permission.LocationWhenInUse))
+							results.Add(Permission.LocationWhenInUse, grantResults[i] == Android.Content.PM.Permission.Granted ? PermissionStatus.Granted : PermissionStatus.Denied);
+					}
 
                     if (!results.ContainsKey(permission))
                         results.Add(permission, grantResults[i] == Android.Content.PM.Permission.Granted ? PermissionStatus.Granted : PermissionStatus.Denied);

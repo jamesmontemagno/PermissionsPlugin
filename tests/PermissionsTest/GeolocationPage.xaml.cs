@@ -42,7 +42,13 @@ namespace PermissionsTest
                 case "Contacts":
                     status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Contacts);
                     break;
-                case "Microphone":
+				case "LocationAlways":
+					status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.LocationAlways);
+					break;
+				case "LocationWhenInUse":
+					status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.LocationWhenInUse);
+					break;
+				case "Microphone":
                     status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Microphone);
                     break;
                 case "Phone":
@@ -80,7 +86,13 @@ namespace PermissionsTest
                     case "Contacts":
                         status = (await CrossPermissions.Current.RequestPermissionsAsync(Permission.Contacts))[Permission.Contacts];
                         break;
-                    case "Microphone":
+					case "LocationAlways":
+						status = (await CrossPermissions.Current.RequestPermissionsAsync(Permission.LocationAlways))[Permission.LocationAlways];
+						break;
+					case "LocationWhenInUse":
+						status = (await CrossPermissions.Current.RequestPermissionsAsync(Permission.LocationWhenInUse))[Permission.LocationWhenInUse];
+						break;
+					case "Microphone":
                         status = (await CrossPermissions.Current.RequestPermissionsAsync(Permission.Microphone))[Permission.Microphone];
                         break;
                     case "Phone":

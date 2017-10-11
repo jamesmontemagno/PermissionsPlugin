@@ -89,7 +89,9 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <None Include="Entitlements.plist" />
-    <None Include="Info.plist" />
+    <None Include="Info.plist">
+      <SubType>Designer</SubType>
+    </None>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <ITunesArtwork Include="iTunesArtwork" />
     <ITunesArtwork Include="iTunesArtwork%402x" />
@@ -111,7 +113,6 @@
     <BundleResource Include="Resources\Icon-Small.png" />
     <BundleResource Include="Resources\Icon-Small%402x.png" />
     <BundleResource Include="Resources\Icon-Small%403x.png" />
-    <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
