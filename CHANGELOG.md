@@ -1,3 +1,8 @@
+### 2.1.0
+* Add MediaLibrary permission for iOS's MPMediaLibrary
+* Add LocationAlways & LocationWhenInUse permissions for iOS to directly ask
+* Fix some issues with locking on iOS
+
 ### 2.0.0
 * Re-target .NET Standard
 * Dependent on Android 25.3.1 Support Libraries
