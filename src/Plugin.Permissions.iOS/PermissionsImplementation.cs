@@ -12,6 +12,7 @@ using UIKit;
 using Photos;
 using System.Diagnostics;
 using Speech;
+using MediaPlayer;
 
 namespace Plugin.Permissions
 {
@@ -66,7 +67,9 @@ namespace Plugin.Permissions
 				case Permission.LocationAlways:
 				case Permission.LocationWhenInUse:
                     return Task.FromResult(GetLocationPermissionStatus(permission));
-                case Permission.Microphone:
+				case Permission.MediaLibrary:
+					return Task.FromResult(MediaLibraryPermissionStatus);
+				case Permission.Microphone:
                     return Task.FromResult(GetAVPermissionStatus(AVMediaType.Audio));
                 //case Permission.NotificationsLocal:
                 //    break;
@@ -122,6 +125,9 @@ namespace Plugin.Permissions
                     case Permission.Location:
                         results.Add(permission, await RequestLocationPermission(permission).ConfigureAwait(false));
                         break;
+					case Permission.MediaLibrary:
+						results.Add(permission, await RequestMediaLibraryPermission().ConfigureAwait(false));
+						break;
                     case Permission.Microphone:
                         try
                         {
@@ -530,9 +536,69 @@ namespace Plugin.Permissions
                 }
             }
         }
-        #endregion
+		#endregion
 
-        public bool OpenAppSettings()
+		#region MediaLib
+		PermissionStatus MediaLibraryPermissionStatus
+		{
+			get
+			{
+				//Opening settings only open in iOS 9.3+
+				if (!UIDevice.CurrentDevice.CheckSystemVersion(9, 3))
+					return PermissionStatus.Unknown;
+
+				var status = MPMediaLibrary.AuthorizationStatus;
+				switch (status)
+				{
+					case MPMediaLibraryAuthorizationStatus.Authorized:
+						return PermissionStatus.Granted;
+					case MPMediaLibraryAuthorizationStatus.Denied:
+						return PermissionStatus.Denied;
+					case MPMediaLibraryAuthorizationStatus.Restricted:
+						return PermissionStatus.Restricted;
+					default:
+						return PermissionStatus.Unknown;
+				}
+			}
+		}
+
+		Task<PermissionStatus> RequestMediaLibraryPermission()
+		{
+
+			//Opening settings only open in iOS 9.3+
+			if (!UIDevice.CurrentDevice.CheckSystemVersion(9, 3))
+				return Task.FromResult(PermissionStatus.Unknown);
+
+			if (MediaLibraryPermissionStatus != PermissionStatus.Unknown)
+				return Task.FromResult(MediaLibraryPermissionStatus);
+
+			var tcs = new TaskCompletionSource<PermissionStatus>();
+
+			MPMediaLibrary.RequestAuthorization(status =>
+			{
+				switch (status)
+				{
+					case MPMediaLibraryAuthorizationStatus.Authorized:
+						tcs.SetResult(PermissionStatus.Granted);
+						break;
+					case MPMediaLibraryAuthorizationStatus.Denied:
+						tcs.SetResult(PermissionStatus.Denied);
+						break;
+					case MPMediaLibraryAuthorizationStatus.Restricted:
+						tcs.SetResult(PermissionStatus.Restricted);
+						break;
+					default:
+						tcs.SetResult(PermissionStatus.Unknown);
+						break;
+				}
+			});
+
+			return tcs.Task;
+		}
+
+		#endregion
+
+		public bool OpenAppSettings()
         {
             //Opening settings only open in iOS 8+
             if (!UIDevice.CurrentDevice.CheckSystemVersion(8, 0))

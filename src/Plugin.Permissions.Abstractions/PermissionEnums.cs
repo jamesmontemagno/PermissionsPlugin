@@ -118,5 +118,11 @@
 		/// UWP: Geolocator
 		/// </summary>
 		LocationWhenInUse,
+		/// <summary>
+		/// Android: None
+		/// iOS: MPMediaLibrary
+		/// UWP: None
+		/// </summary>
+		MediaLibrary
 	}
 }
