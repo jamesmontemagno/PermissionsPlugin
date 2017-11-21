@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Property Group for Tizen Project -->
+  <PropertyGroup>
+    <TargetFramework>tizen40</TargetFramework>
+    <TizenCreateTpkOnBuild>false</TizenCreateTpkOnBuild>
+    <AssemblyName>Plugin.Permissions</AssemblyName>
+    <RootNamespace>Plugin.Permissions</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>None</DebugType>
+  </PropertyGroup>
+
+  <!-- Include Nuget Package for Tizen Project building -->
+  <ItemGroup>
+    <PackageReference Include="Tizen.NET" Version="4.0.0">
+      <ExcludeAssets>Runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Tizen.NET.Sdk" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Plugin.Permissions\CrossPermissions.cs">
+      <Link>CrossPermissions.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Plugin.Permissions.Abstractions\Plugin.Permissions.Abstractions.csproj">
+      <Project>{61381acd-0ac7-4534-9e53-f21900c246b8}</Project>
+      <Name>Plugin.Permissions.Abstractions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="..\Plugin.Permissions.Shared\Plugin.Permissions.Shared.projitems" Label="Shared" />
+</Project>

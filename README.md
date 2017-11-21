@@ -16,6 +16,7 @@ Want to read about the creation, checkout my [in-depth blog post](http://motzcod
 |Xamarin.iOS|iOS 8+|
 |Xamarin.Android|API 14+|
 |Windows 10 UWP(Beta)|10+|
+|Tizen|4.0+|
 
 *See platform notes below
 
