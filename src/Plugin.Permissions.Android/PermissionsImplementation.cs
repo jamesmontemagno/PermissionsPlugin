@@ -130,10 +130,11 @@ namespace Plugin.Permissions
                 Debug.WriteLine("Unable to detect current Activity. Please ensure Plugin.CurrentActivity is installed in your Android project and your Application class is registering with Application.IActivityLifecycleCallbacks.");
                 foreach (var permission in permissions)
                 {
-                    if (results.ContainsKey(permission))
-                        continue;
-
-                    results.Add(permission, PermissionStatus.Unknown);
+					lock (locker)
+					{
+						if (!results.ContainsKey(permission))
+							results.Add(permission, PermissionStatus.Unknown);
+					}
                 }
 
                 return results;
@@ -151,7 +152,8 @@ namespace Plugin.Permissions
                     {
                         lock (locker)
                         {
-                            results.Add(permission, PermissionStatus.Unknown);
+							if (!results.ContainsKey(permission))
+								results.Add(permission, PermissionStatus.Unknown);
                         }
                         continue;
                     }
@@ -163,7 +165,8 @@ namespace Plugin.Permissions
                     //if we are granted you are good!
                     lock (locker)
                     {
-                        results.Add(permission, PermissionStatus.Granted);
+						if (!results.ContainsKey(permission))
+							results.Add(permission, PermissionStatus.Granted);
                     }
                 }
             }
