@@ -1,3 +1,6 @@
+### 2.1.1
+* Android: Fix edgecase when permission is inserted twice into returned dictionary
+
 ### 2.1.0
 * Add MediaLibrary permission for iOS's MPMediaLibrary
 * Add LocationAlways & LocationWhenInUse permissions for iOS to directly ask
