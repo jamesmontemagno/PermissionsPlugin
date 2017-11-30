@@ -5,7 +5,6 @@ using Android.Support.V4.Content;
 using Plugin.Permissions.Abstractions;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Plugin.CurrentActivity;
@@ -13,7 +12,10 @@ using Android.Content;
 
 namespace Plugin.Permissions
 {
-    /// <summary>
+	using Android.OS;
+	using Debug = System.Diagnostics.Debug;
+
+	/// <summary>
     /// Implementation for Feature
     /// </summary>
     public class PermissionsImplementation : IPermissions
@@ -100,12 +102,29 @@ namespace Plugin.Permissions
                 return Task.FromResult(PermissionStatus.Unknown);
             }
 
-            foreach (var name in names)
+			var isTargetSdkVersionAtLeastM = context.ApplicationInfo.TargetSdkVersion >= BuildVersionCodes.M;
+
+			foreach (var name in names)
             {
-                if (ContextCompat.CheckSelfPermission(context, name) == Android.Content.PM.Permission.Denied)
-                    return Task.FromResult(PermissionStatus.Denied);
-            }
-            return Task.FromResult(PermissionStatus.Granted);
+	            // Only if the target version is at least Android M the Context.CheckSelfPermission does work right
+	            if (isTargetSdkVersionAtLeastM)
+	            {
+		            if (ContextCompat.CheckSelfPermission(context, name) != Android.Content.PM.Permission.Granted)
+		            {
+			            return Task.FromResult(PermissionStatus.Denied);
+		            }
+	            }
+	            else
+	            {
+		            // If the target version is smaller than Android M we have to use the PermissionChecker
+		            if (PermissionChecker.CheckSelfPermission(context, name) != PermissionChecker.PermissionGranted)
+		            {
+			            return Task.FromResult(PermissionStatus.Denied);
+		            }
+	            }
+			}
+
+			return Task.FromResult(PermissionStatus.Granted);
         }
 
         /// <summary>
