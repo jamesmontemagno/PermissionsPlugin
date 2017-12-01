@@ -100,10 +100,20 @@ namespace Plugin.Permissions
                 return Task.FromResult(PermissionStatus.Unknown);
             }
 
-            foreach (var name in names)
-            {
-                if (ContextCompat.CheckSelfPermission(context, name) == Android.Content.PM.Permission.Denied)
-                    return Task.FromResult(PermissionStatus.Denied);
+			var targetsMOrHigher = context.ApplicationInfo.TargetSdkVersion >= Android.OS.BuildVersionCodes.M;
+
+			foreach (var name in names)
+			{
+				if (targetsMOrHigher)
+				{
+					if (ContextCompat.CheckSelfPermission(context, name) != Android.Content.PM.Permission.Granted)
+						return Task.FromResult(PermissionStatus.Denied);
+				}
+				else
+				{
+					if(PermissionChecker.CheckSelfPermission(context, name)  != PermissionChecker.PermissionGranted)
+						return Task.FromResult(PermissionStatus.Denied);
+				}
             }
             return Task.FromResult(PermissionStatus.Granted);
         }
