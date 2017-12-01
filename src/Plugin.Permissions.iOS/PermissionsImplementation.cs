@@ -215,7 +215,7 @@ namespace Plugin.Permissions
 
             addressBook.RequestAccess((success, error) =>
                 {
-                    tcs.SetResult((success ? PermissionStatus.Granted : PermissionStatus.Denied));
+                    tcs.TrySetResult((success ? PermissionStatus.Granted : PermissionStatus.Denied));
                 });
 
             return tcs.Task;
@@ -282,7 +282,7 @@ namespace Plugin.Permissions
 
 					locationManager.AuthorizationChanged -= authCallback;
 
-					tcs.SetResult(GetLocationPermissionStatus(permission));
+					tcs.TrySetResult(GetLocationPermissionStatus(permission));
 					
 				};
 
@@ -438,16 +438,16 @@ namespace Plugin.Permissions
                     switch(status)
                     {
                         case PHAuthorizationStatus.Authorized:
-                            tcs.SetResult(PermissionStatus.Granted);
+                            tcs.TrySetResult(PermissionStatus.Granted);
                             break;
                         case PHAuthorizationStatus.Denied:
-                            tcs.SetResult(PermissionStatus.Denied);
+                            tcs.TrySetResult(PermissionStatus.Denied);
                             break;
                         case PHAuthorizationStatus.Restricted:
-                            tcs.SetResult(PermissionStatus.Restricted);
+                            tcs.TrySetResult(PermissionStatus.Restricted);
                             break;
                         default:
-                            tcs.SetResult(PermissionStatus.Unknown);
+                            tcs.TrySetResult(PermissionStatus.Unknown);
                             break;
                     }
                 });
@@ -500,16 +500,16 @@ namespace Plugin.Permissions
                 switch(status)
                 {
                     case SFSpeechRecognizerAuthorizationStatus.Authorized:
-                        tcs.SetResult(PermissionStatus.Granted);
+                        tcs.TrySetResult(PermissionStatus.Granted);
                         break;
                     case SFSpeechRecognizerAuthorizationStatus.Denied:
-                        tcs.SetResult(PermissionStatus.Denied);
+                        tcs.TrySetResult(PermissionStatus.Denied);
                         break;
                     case SFSpeechRecognizerAuthorizationStatus.Restricted:
-                        tcs.SetResult(PermissionStatus.Restricted);
+                        tcs.TrySetResult(PermissionStatus.Restricted);
                         break;
                     default:
-                        tcs.SetResult(PermissionStatus.Unknown);
+                        tcs.TrySetResult(PermissionStatus.Unknown);
                         break;
                 }
             });
@@ -579,16 +579,16 @@ namespace Plugin.Permissions
 				switch (status)
 				{
 					case MPMediaLibraryAuthorizationStatus.Authorized:
-						tcs.SetResult(PermissionStatus.Granted);
+						tcs.TrySetResult(PermissionStatus.Granted);
 						break;
 					case MPMediaLibraryAuthorizationStatus.Denied:
-						tcs.SetResult(PermissionStatus.Denied);
+						tcs.TrySetResult(PermissionStatus.Denied);
 						break;
 					case MPMediaLibraryAuthorizationStatus.Restricted:
-						tcs.SetResult(PermissionStatus.Restricted);
+						tcs.TrySetResult(PermissionStatus.Restricted);
 						break;
 					default:
-						tcs.SetResult(PermissionStatus.Unknown);
+						tcs.TrySetResult(PermissionStatus.Unknown);
 						break;
 				}
 			});
