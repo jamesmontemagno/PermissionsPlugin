@@ -235,7 +235,8 @@ namespace Plugin.Permissions
                         results.Add(permission, grantResults[i] == Android.Content.PM.Permission.Granted ? PermissionStatus.Granted : PermissionStatus.Denied);
                 }
             }
-            tcs.SetResult(results);
+			
+            tcs.TrySetResult(results);
         }
 
         static Permission GetPermissionForManifestName(string permission)
