@@ -33,7 +33,7 @@ public override void OnRequestPermissionsResult(int requestCode, string[] permis
 You MUST set your Target version to API 25+ and Compile against API 25+:
 
 ### iOS Specific
-When building against the iOS 10 SDK (Xcode 8) please be aware of the platform privacy changes. Based on what permissions you are using, you must add information into your info.plist. Please read the [following blog for more information](https://blog.xamarin.com/new-ios-10-privacy-permission-settings/). 
+Based on what permissions you are using, you must add information into your info.plist. Please read the [Working with Security and Privacy guide for keys you will need to add](https://developer.xamarin.com/guides/ios/application_fundamentals/security-privacy-enhancements/). 
 
 Due to API usage it is required to add the Calendar permission :(
 
