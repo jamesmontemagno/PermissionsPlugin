@@ -1,5 +1,6 @@
-### 2.1.1
+### 2.2.0
 * Android: Fix edgecase when permission is inserted twice into returned dictionary
+* Andriod: If setting target < M will return proper permissions when checked.
 
 ### 2.1.0
 * Add MediaLibrary permission for iOS's MPMediaLibrary
