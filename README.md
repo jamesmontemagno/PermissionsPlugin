@@ -30,7 +30,17 @@ public override void OnRequestPermissionsResult(int requestCode, string[] permis
 }
 ```
 
-You MUST set your Target version to API 25+ and Compile against API 25+:
+You MUST set your Target version to API 25+ and Compile against API 25+
+
+## Android Current Activity Setup
+
+This plugin uses the [Current Activity Plugin](https://github.com/jamesmontemagno/CurrentActivityPlugin/blob/master/README.md) to get access to the current Android Activity. Be sure to complete the full setup if a MainApplication.cs file was not automatically added to your application. Please fully read through the [Current Activity Plugin Documentation](https://github.com/jamesmontemagno/CurrentActivityPlugin/blob/master/README.md). At an absolute minimum you must set the following in your Activity's OnCreate method:
+
+```csharp
+Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity = this;
+```
+
+It is highly recommended that you use a custom Application that are outlined in the Current Activity Plugin Documentation](https://github.com/jamesmontemagno/CurrentActivityPlugin/blob/master/README.md)
 
 ### iOS Specific
 Based on what permissions you are using, you must add information into your info.plist. Please read the [Working with Security and Privacy guide for keys you will need to add](https://developer.xamarin.com/guides/ios/application_fundamentals/security-privacy-enhancements/). 
@@ -217,5 +227,7 @@ UWP has a limited set of supported permissions. You can see the documentation ab
 Thanks!
 
 #### License
-Licensed under main repo license(MIT)### Want To Support This Project?
+Licensed under main repo license(MIT)
+
+### Want To Support This Project?
 All I have ever asked is to be active by submitting bugs, features, and sending those pull requests down! Want to go further? Make sure to subscribe to my weekly development podcast [Merge Conflict](http://mergeconflict.fm), where I talk all about awesome Xamarin goodies and you can optionally support the show by becoming a [supporter on Patreon](https://www.patreon.com/mergeconflictfm).
