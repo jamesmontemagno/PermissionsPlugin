@@ -19,7 +19,7 @@ Want to read about the creation, checkout my [in-depth blog post](http://motzcod
 
 *See platform notes below
 
-Build Status: [![Build status](https://ci.appveyor.com/api/projects/status/n0vn5715cx5f7rpy?svg=true)](https://ci.appveyor.com/project/JamesMontemagno/permissionsplugin)
+Build Status: ![Build status](https://jamesmontemagno.visualstudio.com/_apis/public/build/definitions/6b79a378-ddd6-4e31-98ac-a12fcd68644c/19/badge)
 
 ### Android specific in your BaseActivity or MainActivity (for Xamarin.Forms) add this code:
 ```csharp
