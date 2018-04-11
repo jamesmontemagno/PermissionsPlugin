@@ -1,20 +1,74 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard1.0</TargetFramework>
-    <AssemblyName>Plugin.Permissions</AssemblyName>
-    <RootNamespace>Plugin.Permissions</RootNamespace>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
-    <Version>1.0.0.0</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>netstandard1.0;netstandard2.0;MonoAndroid71;Xamarin.iOS10;uap10.0.10240;</TargetFrameworks>
+		<AssemblyName>Plugin.Permissions</AssemblyName>
+		<RootNamespace>Plugin.Permissions</RootNamespace>
+		<Product>$(AssemblyName) ($(TargetFramework))</Product>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
+		<Version>1.0.0.0</Version>
+		<Authors>James Montemagno</Authors>
+		<PackageId>Plugin.Permissions</PackageId>
+		<PackOnBuild>true</PackOnBuild>
+		<PackageIconUrl>http://refractored.com/images/plugin_permissions.png</PackageIconUrl>
+		<PackageLicenseUrl>https://github.com/jamesmontemagno/PermissionsPlugin/blob/master/LICENSE</PackageLicenseUrl>
+		<Owners>JamesMontemagno</Owners>
+		<PackageProjectUrl>https://github.com/jamesmontemagno/PermissionsPlugin</PackageProjectUrl>
+		<Summary>Check and Request Permissions from shared code.</Summary>
+		<PackageTags>permissions, plugin permissions, permission plugin, xamarin, pcl, xam.pcl, plugin, plugin for xamarin, windows phone, winphone, wp8, winrt, android, xamarin.forms, ios</PackageTags>
+		<Title>Permissions Plugin for Xamarin and Windows</Title>
+		<Description>
+			Check to see if your users have granted or denied permissions for common permission groups on iOS and Android.
+			Additionally, you can request permissions with a simple cross-platform async/awaitified API.
+		</Description>
+		<Copyright>Copyright 2018</Copyright>
+		<RepositoryUrl>https://github.com/jamesmontemagno/PermissionsPlugin</RepositoryUrl>
+		<PackageReleaseNotes>See: https://github.com/jamesmontemagno/PermissionsPlugin </PackageReleaseNotes>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.0\Plugin.Permissions.xml</DocumentationFile>
-  </PropertyGroup>
+		<NeutralLanguage>en</NeutralLanguage>
+		<LangVersion>default</LangVersion>
+		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Plugin.Permissions.Abstractions\Plugin.Permissions.Abstractions.csproj" />
-  </ItemGroup>
+		<DefineConstants>$(DefineConstants);</DefineConstants>
+
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
+		<DebugType>full</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)'=='Release' ">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<DebugType>pdbonly</DebugType>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\..\nuget\readme.txt" Pack="true" />
+		<PackageReference Include="MSBuild.Sdk.Extras" Version="1.2.0" PrivateAssets="All" />
+		<Compile Include="**\*.shared.cs" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
+	</ItemGroup>
+
+	<ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
+		<PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.2.3" />
+		<Compile Include="**\*.uwp.cs" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
+		<Compile Include="**\*.android.cs" />
+		<PackageReference Include="Xamarin.Android.Support.Compat" Version="25.4.0.2" />
+		<PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="25.4.0.2" />
+		<PackageReference Include="Plugin.CurrentActivity" Version="2.0.0.4-beta" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
+		<Compile Include="**\*.ios.cs" />
+	</ItemGroup>
+
+
+	<Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
 
 </Project>

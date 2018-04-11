@@ -1,14 +1,8 @@
 Permissions Readme
 
-You can find a full change log here: https://github.com/jamesmontemagno/PermissionsPlugin/blob/master/CHANGELOG.md
-
-## News
-- Plugins have moved to .NET Standard and have some important changes! Please read my blog:
-http://motzcod.es/post/162402194007/plugins-for-xamarin-go-dotnet-standard
 
 **IMPORTANT**
 Android:
-You must set your app to compile against API 25 or higher. It is required that you add the following override to any Activity that you will be requesting permissions from:
 
 public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
 {
@@ -16,8 +10,22 @@ public override void OnRequestPermissionsResult(int requestCode, string[] permis
 	PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 }
 
-Additionally, Plugin.CurrentActivity was installed to propogate the current Activity up to this plugin. Please ensure that your Application class is correct configured.
+## Android Current Activity Setup
 
-iOS:
+This plugin uses the [Current Activity Plugin](https://github.com/jamesmontemagno/CurrentActivityPlugin/blob/master/README.md) to get access to the current Android Activity. Be sure to complete the full setup if a MainApplication.cs file was not automatically added to your application. Please fully read through the [Current Activity Plugin Documentation](https://github.com/jamesmontemagno/CurrentActivityPlugin/blob/master/README.md). At an absolute minimum you must set the following in your Activity's OnCreate method:
 
-When building against the iOS 10 SDK (Xcode 8) please be aware of the platform privacy changes. Based on what permissions you are using, you must add information into your info.plist. Please read the following blog for more information. https://blog.xamarin.com/new-ios-10-privacy-permission-settings/
+```csharp
+Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, bundle);
+```
+
+It is highly recommended that you use a custom Application that are outlined in the Current Activity Plugin Documentation](https://github.com/jamesmontemagno/CurrentActivityPlugin/blob/master/README.md)
+
+### iOS Specific
+Based on what permissions you are using, you must add information into your info.plist. Please read the [Working with Security and Privacy guide for keys you will need to add](https://developer.xamarin.com/guides/ios/application_fundamentals/security-privacy-enhancements/). 
+
+Due to API usage it is required to add the Calendar permission :(
+```
+<key>NSCalendarsUsageDescription</key>
+<string>Needs Calendar Permission</string>
+```
+Even though your app may not use calendar at all. I am looking into a workaround for this in the future.
