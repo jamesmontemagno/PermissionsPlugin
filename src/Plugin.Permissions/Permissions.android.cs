@@ -93,7 +93,7 @@ namespace Plugin.Permissions
                 return Task.FromResult(PermissionStatus.Unknown);
             }
 
-            var context = CrossCurrentActivity.Current.Activity ?? Application.Context;
+            var context = CrossCurrentActivity.Current.Activity ?? CrossCurrentActivity.Current.AppContext;
             if (context == null)
             {
                 Debug.WriteLine("Unable to detect current Activity or App Context. Please ensure Plugin.CurrentActivity is installed in your Android project and your Application class is registering with Application.IActivityLifecycleCallbacks.");
@@ -152,7 +152,7 @@ namespace Plugin.Permissions
             var permissionsToRequest = new List<string>();
             foreach (var permission in permissions)
             {
-                var result = await CheckPermissionStatusAsync(permission).ConfigureAwait(false);
+				var result = await CheckPermissionStatusAsync(permission);
                 if (result != PermissionStatus.Granted)
                 {
                     var names = GetManifestNames(permission);
@@ -188,7 +188,7 @@ namespace Plugin.Permissions
 
             ActivityCompat.RequestPermissions(activity, permissionsToRequest.ToArray(), permissioncode);
 
-            return await tcs.Task.ConfigureAwait(false);
+            return await tcs.Task;
         }
 
         const int permissioncode = 25;
@@ -404,9 +404,9 @@ namespace Plugin.Permissions
                     return requestedPermissions.Any(r => r.Equals(permission, StringComparison.InvariantCultureIgnoreCase));
 
                 //try to use current activity else application context
-                var context = CrossCurrentActivity.Current.Activity ?? Application.Context;
+                var context = CrossCurrentActivity.Current.Activity ?? CrossCurrentActivity.Current.AppContext;
 
-                if (context == null)
+				if (context == null)
                 {
                     Debug.WriteLine("Unable to detect current Activity or App Context. Please ensure Plugin.CurrentActivity is installed in your Android project and your Application class is registering with Application.IActivityLifecycleCallbacks.");
                     return false;
@@ -444,7 +444,7 @@ namespace Plugin.Permissions
         public bool OpenAppSettings()
         {
 
-            var context = CrossCurrentActivity.Current.Activity;
+			var context = CrossCurrentActivity.Current.Activity ?? CrossCurrentActivity.Current.AppContext;
             if (context == null)
                 return false;
 

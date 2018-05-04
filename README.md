@@ -6,8 +6,8 @@ Want to read about the creation, checkout my [in-depth blog post](http://motzcod
 
 ### Setup
 * Available on NuGet: http://www.nuget.org/packages/Plugin.Permissions [![NuGet](https://img.shields.io/nuget/v/Plugin.Permissions.svg?label=NuGet)](https://www.nuget.org/packages/Plugin.Permissions/)
-* Install into your PCL project and Client projects.
-* Development NuGet: https://ci.appveyor.com/nuget/permissionsplugin
+* Install into your PCL/.NET Standard project and Client projects.
+* Development NuGet: https://www.myget.org/feed/Packages/xamarin-plugins
 
 **Platform Support**
 
@@ -25,8 +25,8 @@ Build Status: ![Build status](https://jamesmontemagno.visualstudio.com/_apis/pub
 ```csharp
 public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
 {
-    base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
     PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+    base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 }
 ```
 

@@ -1,3 +1,9 @@
+
+### 3.0.0
+* Upgrade to CurrentActivity 2.0
+* iOS cleanup issues with sensor (better support for ios 11)
+
+
 ### 2.2.0
 * Android: Fix edgecase when permission is inserted twice into returned dictionary
 * Andriod: If setting target < M will return proper permissions when checked.

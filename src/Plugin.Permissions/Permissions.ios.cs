@@ -16,10 +16,10 @@ using MediaPlayer;
 
 namespace Plugin.Permissions
 {
-    /// <summary>
-    /// Implementation for Permissions
-    /// </summary>
-    public class PermissionsImplementation : IPermissions
+	/// <summary>
+	/// Implementation for Permissions
+	/// </summary>
+	public class PermissionsImplementation : IPermissions
     {
 
         CLLocationManager locationManager;
@@ -27,33 +27,27 @@ namespace Plugin.Permissions
         EKEventStore eventStore;
         CMMotionActivityManager activityManager;
 
-        /// <summary>
-        /// Gets the current permissions implementation
-        /// </summary>
-        /// <value>The current.</value>
-        public static PermissionsImplementation Current
-        {
-            get {  return (PermissionsImplementation)CrossPermissions.Current; }
-        }
+		/// <summary>
+		/// Gets the current permissions implementation
+		/// </summary>
+		/// <value>The current.</value>
+		public static PermissionsImplementation Current => (PermissionsImplementation)CrossPermissions.Current;
 
 
-        /// <summary>
-        /// Request to see if you should show a rationale for requesting permission
-        /// Only on Android
-        /// </summary>
-        /// <returns>True or false to show rationale</returns>
-        /// <param name="permission">Permission to check.</param>
-        public Task<bool> ShouldShowRequestPermissionRationaleAsync(Permission permission)
-        {
-            return Task.FromResult(false);
-        }
+		/// <summary>
+		/// Request to see if you should show a rationale for requesting permission
+		/// Only on Android
+		/// </summary>
+		/// <returns>True or false to show rationale</returns>
+		/// <param name="permission">Permission to check.</param>
+		public Task<bool> ShouldShowRequestPermissionRationaleAsync(Permission permission) => Task.FromResult(false);
 
-        /// <summary>
-        /// Determines whether this instance has permission the specified permission.
-        /// </summary>
-        /// <returns><c>true</c> if this instance has permission the specified permission; otherwise, <c>false</c>.</returns>
-        /// <param name="permission">Permission to check.</param>
-        public Task<PermissionStatus> CheckPermissionStatusAsync(Permission permission)
+		/// <summary>
+		/// Determines whether this instance has permission the specified permission.
+		/// </summary>
+		/// <returns><c>true</c> if this instance has permission the specified permission; otherwise, <c>false</c>.</returns>
+		/// <param name="permission">Permission to check.</param>
+		public Task<PermissionStatus> CheckPermissionStatusAsync(Permission permission)
         {
             switch (permission)
             {
@@ -80,7 +74,7 @@ namespace Plugin.Permissions
                 case Permission.Reminders:
                     return Task.FromResult(GetEventPermissionStatus(EKEntityType.Reminder));
                 case Permission.Sensors:
-                    return Task.FromResult((CMMotionActivityManager.IsActivityAvailable ? PermissionStatus.Granted : PermissionStatus.Denied));
+					return Task.FromResult(SensorsPermissionStatus);
                 case Permission.Speech:
                     return Task.FromResult(SpeechPermissionStatus);
             }
@@ -103,12 +97,12 @@ namespace Plugin.Permissions
                 switch (permission)
                 {
                     case Permission.Calendar:
-                        results.Add(permission, await RequestEventPermission(EKEntityType.Event).ConfigureAwait(false));
+                        results.Add(permission, await RequestEventPermission(EKEntityType.Event));
                         break;
                     case Permission.Camera:
                         try
                         {
-                            var authCamera = await AVCaptureDevice.RequestAccessForMediaTypeAsync(AVMediaType.Video).ConfigureAwait(false);
+                            var authCamera = await AVCaptureDevice.RequestAccessForMediaTypeAsync(AVMediaType.Video);
                             results.Add(permission, (authCamera ? PermissionStatus.Granted : PermissionStatus.Denied));
                         }
                         catch(Exception ex)
@@ -118,20 +112,20 @@ namespace Plugin.Permissions
                         }
                         break;
                     case Permission.Contacts:
-                        results.Add(permission, await RequestContactsPermission().ConfigureAwait(false));
+                        results.Add(permission, await RequestContactsPermission());
                         break;
 					case Permission.LocationWhenInUse:
 					case Permission.LocationAlways:
                     case Permission.Location:
-                        results.Add(permission, await RequestLocationPermission(permission).ConfigureAwait(false));
+                        results.Add(permission, await RequestLocationPermission(permission));
                         break;
 					case Permission.MediaLibrary:
-						results.Add(permission, await RequestMediaLibraryPermission().ConfigureAwait(false));
+						results.Add(permission, await RequestMediaLibraryPermission());
 						break;
                     case Permission.Microphone:
                         try
                         {
-                            var authMic = await AVCaptureDevice.RequestAccessForMediaTypeAsync(AVMediaType.Audio).ConfigureAwait(false);
+                            var authMic = await AVCaptureDevice.RequestAccessForMediaTypeAsync(AVMediaType.Audio);
                             results.Add(permission, (authMic ? PermissionStatus.Granted : PermissionStatus.Denied));
                         }
                         catch(Exception ex)
@@ -141,16 +135,16 @@ namespace Plugin.Permissions
                         }
                         break;
                     case Permission.Photos:
-                        results.Add(permission, await RequestPhotosPermission().ConfigureAwait(false));
+                        results.Add(permission, await RequestPhotosPermission());
                         break;
                     case Permission.Reminders:
-                        results.Add(permission, await RequestEventPermission(EKEntityType.Reminder).ConfigureAwait(false));
+                        results.Add(permission, await RequestEventPermission(EKEntityType.Reminder));
                         break;
                     case Permission.Sensors:
-                        results.Add(permission, await RequestSensorsPermission().ConfigureAwait(false));
+                        results.Add(permission, await RequestSensorsPermission());
                         break;
                     case Permission.Speech:
-                        results.Add(permission, await RequestSpeechPermission().ConfigureAwait(false));
+                        results.Add(permission, await RequestSpeechPermission());
                         break;
                 }
 
@@ -248,14 +242,14 @@ namespace Plugin.Permissions
 
             eventStore = new EKEventStore();
 
-            var results = await eventStore.RequestAccessAsync(eventType).ConfigureAwait(false);
+            var results = await eventStore.RequestAccessAsync(eventType);
 
             return results.Item1 ? PermissionStatus.Granted : PermissionStatus.Denied;
         }
 		#endregion
 
 		#region Location
-
+		public static TimeSpan LocationPermissionTimeout { get; set; } = new TimeSpan(0, 0, 8);
 		Task<PermissionStatus> RequestLocationPermission(Permission permission = Permission.Location)
 		{
 			if(CLLocationManager.Status == CLAuthorizationStatus.AuthorizedWhenInUse && permission == Permission.LocationAlways)
@@ -272,21 +266,40 @@ namespace Plugin.Permissions
 
 			locationManager = new CLLocationManager();
 
-			EventHandler<CLAuthorizationChangedEventArgs> authCallback = null;
 			var tcs = new TaskCompletionSource<PermissionStatus>();
 
-			authCallback = (sender, e) =>
+			var previousState = CLLocationManager.Status;
+
+			locationManager.AuthorizationChanged += AuthorizationChanged;
+
+			void AuthorizationChanged(object sender, CLAuthorizationChangedEventArgs e)
+			{
+				Console.WriteLine(e.Status);
+
+				if (e.Status == CLAuthorizationStatus.NotDetermined)
+					return;
+
+				if (previousState == CLAuthorizationStatus.AuthorizedWhenInUse && permission == Permission.LocationAlways)
 				{
-					if (e.Status == CLAuthorizationStatus.NotDetermined)
+					if(e.Status == CLAuthorizationStatus.AuthorizedWhenInUse)
+					{
+						WithTimeout(tcs.Task, LocationPermissionTimeout).ContinueWith((t) =>
+						{
+							//wait 10 seconds and check to see if it is completed or not.
+							if (!tcs.Task.IsCompleted)
+							{
+								locationManager.AuthorizationChanged -= AuthorizationChanged;
+								tcs.TrySetResult(GetLocationPermissionStatus(permission));
+							}
+						});
 						return;
+					}
+				}
 
-					locationManager.AuthorizationChanged -= authCallback;
+				locationManager.AuthorizationChanged -= AuthorizationChanged;
 
-					tcs.TrySetResult(GetLocationPermissionStatus(permission));
-					
-				};
-
-			locationManager.AuthorizationChanged += authCallback;
+				tcs.TrySetResult(GetLocationPermissionStatus(permission));
+			}
 
 
 			var info = NSBundle.MainBundle.InfoDictionary;
@@ -322,7 +335,17 @@ namespace Plugin.Permissions
 			return tcs.Task;
         }
 
-        PermissionStatus GetLocationPermissionStatus(Permission permission)
+		async Task<T> WithTimeout<T>(Task<T> task, TimeSpan timeSpan)
+		{
+			var retTask = await Task.WhenAny(task, Task.Delay(timeSpan))
+				.ConfigureAwait(false);
+
+			return retTask is Task<T> ? task.Result : default(T);
+		}
+
+
+
+		PermissionStatus GetLocationPermissionStatus(Permission permission)
         {
             
             if (!CLLocationManager.LocationServicesEnabled)
@@ -458,16 +481,48 @@ namespace Plugin.Permissions
         #endregion
 
         #region Sensors
+
+		PermissionStatus SensorsPermissionStatus
+		{
+			get
+			{
+				var sensorStatus = PermissionStatus.Unknown;
+
+				//return disabled if not avaialble.
+				if (!CMMotionActivityManager.IsActivityAvailable)
+					sensorStatus = PermissionStatus.Disabled;
+				else if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+				{
+					switch (CMMotionActivityManager.AuthorizationStatus)
+					{
+						case CMAuthorizationStatus.Authorized:
+							sensorStatus = PermissionStatus.Granted;
+							break;
+						case CMAuthorizationStatus.Denied:
+							sensorStatus = PermissionStatus.Denied;
+							break;
+						case CMAuthorizationStatus.NotDetermined:
+							sensorStatus = PermissionStatus.Unknown;
+							break;
+						case CMAuthorizationStatus.Restricted:
+							sensorStatus = PermissionStatus.Restricted;
+							break;
+					}
+				}
+
+				return sensorStatus;
+			}
+		}
         async Task<PermissionStatus> RequestSensorsPermission()
         {
-            if (CMMotionActivityManager.IsActivityAvailable)
-                return PermissionStatus.Granted;
+			if (SensorsPermissionStatus != PermissionStatus.Unknown)
+				return SensorsPermissionStatus;		
 
             activityManager = new CMMotionActivityManager();
 
             try
             {
-                var results = await activityManager.QueryActivityAsync(NSDate.DistantPast, NSDate.DistantFuture, NSOperationQueue.MainQueue).ConfigureAwait(false);
+                var results = await activityManager.QueryActivityAsync(NSDate.DistantPast, NSDate.DistantFuture, NSOperationQueue.MainQueue);
                 if(results != null)
                     return PermissionStatus.Granted;
             }

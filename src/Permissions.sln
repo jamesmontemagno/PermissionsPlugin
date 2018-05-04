@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6ADEFD4F-ED2E-42A3-A4E5-D34A29AF1F1F}"
 	ProjectSection(SolutionItems) = preProject
 		..\.editorconfig = ..\.editorconfig
+		..\CHANGELOG.md = ..\CHANGELOG.md
 		..\README.md = ..\README.md
 		..\nuget\readme.txt = ..\nuget\readme.txt
 	EndProjectSection
@@ -14,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.Permissions", "Plugi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E5792C9E-334E-4D60-9C37-CFCA625596FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PermissionsTest", "PermissionsTest\PermissionsTest.csproj", "{6B9FD358-774A-4B06-BA02-D78B5FAA9F85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionsTest", "PermissionsTest\PermissionsTest.csproj", "{6B9FD358-774A-4B06-BA02-D78B5FAA9F85}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PermissionsTest.Droid", "PermissionsTest.Droid\PermissionsTest.Droid.csproj", "{4EC7D108-1C68-4666-8676-500A09D4D2B9}"
 EndProject
