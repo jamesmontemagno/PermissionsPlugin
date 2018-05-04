@@ -60,7 +60,7 @@
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="Plugin.CurrentActivity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Plugin.CurrentActivity.2.0.1.1\lib\monoandroid44\Plugin.CurrentActivity.dll</HintPath>
+      <HintPath>..\packages\Plugin.CurrentActivity.2.0.1.4\lib\monoandroid44\Plugin.CurrentActivity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections" />
@@ -173,7 +173,6 @@
     <AndroidResource Include="Resources\values\colors.xml" />
     <AndroidResource Include="Resources\values\style.xml" />
     <AndroidResource Include="Resources\values-v21\style.xml" />
-    <Content Include="readme.txt" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

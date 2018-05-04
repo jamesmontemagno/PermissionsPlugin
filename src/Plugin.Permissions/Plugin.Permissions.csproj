@@ -26,6 +26,7 @@
 		<RepositoryUrl>https://github.com/jamesmontemagno/PermissionsPlugin</RepositoryUrl>
 		<PackageReleaseNotes>See: https://github.com/jamesmontemagno/PermissionsPlugin </PackageReleaseNotes>
 
+    
 		<NeutralLanguage>en</NeutralLanguage>
 		<LangVersion>default</LangVersion>
 		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -42,8 +43,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<DebugType>pdbonly</DebugType>
 	</PropertyGroup>
-	<ItemGroup>
-		<None Include="..\..\nuget\readme.txt" Pack="true" />
+	<ItemGroup>		
+    <None Include="..\..\nuget\readme.txt" PackagePath="readme.txt" Pack="true" />
 		<PackageReference Include="MSBuild.Sdk.Extras" Version="1.2.0" PrivateAssets="All" />
 		<Compile Include="**\*.shared.cs" />
 	</ItemGroup>
@@ -60,7 +61,7 @@
 		<Compile Include="**\*.android.cs" />
 		<PackageReference Include="Xamarin.Android.Support.Compat" Version="25.4.0.2" />
 		<PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="25.4.0.2" />
-		<PackageReference Include="Plugin.CurrentActivity" Version="2.0.1.1" />
+		<PackageReference Include="Plugin.CurrentActivity" Version="2.0.1.4" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
