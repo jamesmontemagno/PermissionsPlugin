@@ -61,7 +61,7 @@
 		<Compile Include="**\*.android.cs" />
 		<PackageReference Include="Xamarin.Android.Support.Compat" Version="25.4.0.2" />
 		<PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="25.4.0.2" />
-		<PackageReference Include="Plugin.CurrentActivity" Version="2.1.0.1" />
+		<PackageReference Include="Plugin.CurrentActivity" Version="2.1.0.2" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
