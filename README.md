@@ -48,6 +48,9 @@ Due to API usage it is required to add the Calendar permission :(
 <key>NSCalendarsUsageDescription</key>
 <string>Needs Calendar Permission</string>
 ```
+
+You may also see this for: `NSBluetoothPeripheralUsageDescription` which you may also have to add.
+
 Even though your app may not use calendar at all. I am looking into a workaround for this in the future.
 
 
