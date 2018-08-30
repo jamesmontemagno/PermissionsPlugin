@@ -7,7 +7,6 @@ using AVFoundation;
 using Foundation;
 using AddressBook;
 using CoreMotion;
-using EventKit;
 using UIKit;
 using Photos;
 using System.Diagnostics;
@@ -24,7 +23,6 @@ namespace Plugin.Permissions
 
         CLLocationManager locationManager;
         ABAddressBook addressBook;
-        EKEventStore eventStore;
         CMMotionActivityManager activityManager;
 
 		/// <summary>
@@ -51,8 +49,6 @@ namespace Plugin.Permissions
         {
             switch (permission)
             {
-                case Permission.Calendar:
-                    return Task.FromResult(GetEventPermissionStatus(EKEntityType.Event));
                 case Permission.Camera:
                     return Task.FromResult(GetAVPermissionStatus(AVMediaType.Video));
                 case Permission.Contacts:
@@ -71,8 +67,6 @@ namespace Plugin.Permissions
                 //    break;
                 case Permission.Photos:
                     return Task.FromResult(PhotosPermissionStatus);
-                case Permission.Reminders:
-                    return Task.FromResult(GetEventPermissionStatus(EKEntityType.Reminder));
                 case Permission.Sensors:
 					return Task.FromResult(SensorsPermissionStatus);
                 case Permission.Speech:
@@ -96,9 +90,6 @@ namespace Plugin.Permissions
 
                 switch (permission)
                 {
-                    case Permission.Calendar:
-                        results.Add(permission, await RequestEventPermission(EKEntityType.Event));
-                        break;
                     case Permission.Camera:
                         try
                         {
@@ -136,9 +127,6 @@ namespace Plugin.Permissions
                         break;
                     case Permission.Photos:
                         results.Add(permission, await RequestPhotosPermission());
-                        break;
-                    case Permission.Reminders:
-                        results.Add(permission, await RequestEventPermission(EKEntityType.Reminder));
                         break;
                     case Permission.Sensors:
                         results.Add(permission, await RequestSensorsPermission());
@@ -215,38 +203,6 @@ namespace Plugin.Permissions
             return tcs.Task;
         }
         #endregion
-
-        #region Events and Reminders
-        PermissionStatus GetEventPermissionStatus(EKEntityType eventType)
-        {
-            var status = EKEventStore.GetAuthorizationStatus(eventType);
-            switch (status)
-            {
-                case EKAuthorizationStatus.Authorized:
-                    return PermissionStatus.Granted;
-                case EKAuthorizationStatus.Denied:
-                    return PermissionStatus.Denied;
-                case EKAuthorizationStatus.Restricted:
-                    return PermissionStatus.Restricted;
-                default:
-                    return PermissionStatus.Unknown;
-            }
-
-        }
-
-        async Task<PermissionStatus> RequestEventPermission(EKEntityType eventType)
-        {
-
-            if (GetEventPermissionStatus(eventType) == PermissionStatus.Granted)
-                return PermissionStatus.Granted;
-
-            eventStore = new EKEventStore();
-
-            var results = await eventStore.RequestAccessAsync(eventType);
-
-            return results.Item1 ? PermissionStatus.Granted : PermissionStatus.Denied;
-        }
-		#endregion
 
 		#region Location
 		public static TimeSpan LocationPermissionTimeout { get; set; } = new TimeSpan(0, 0, 8);

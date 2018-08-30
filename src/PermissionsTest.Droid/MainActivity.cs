@@ -12,14 +12,15 @@ namespace PermissionsTest.Droid
     public class MainActivity : FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
-        {
-            base.OnCreate(bundle);
+		{
+			ToolbarResource = Resource.Layout.toolbar;
+
+			base.OnCreate(bundle);
 
             Forms.Init(this, bundle);
 
-            ToolbarResource = Resource.Layout.toolbar;
 
-			//Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, bundle);
+			Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, bundle);
 
 			LoadApplication(new App());
         }

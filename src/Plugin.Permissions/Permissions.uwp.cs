@@ -33,8 +33,6 @@ namespace Plugin.Permissions
         {
             switch (permission)
             {
-                case Permission.Calendar:
-                    break;
                 case Permission.Camera:
                     break;
                 case Permission.Contacts:
@@ -48,8 +46,6 @@ namespace Plugin.Permissions
                 case Permission.Phone:
                     break;
                 case Permission.Photos:
-                    break;
-                case Permission.Reminders:
                     break;
                 case Permission.Sensors:
                     {

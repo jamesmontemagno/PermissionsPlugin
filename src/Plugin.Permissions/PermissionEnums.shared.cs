@@ -37,12 +37,6 @@
         /// </summary>
         Unknown,
         /// <summary>
-        /// Android: Calendar
-        /// iOS: Calendar (Events)
-        /// UWP: None
-        /// </summary>
-        Calendar,
-        /// <summary>
         /// Android: Camera
         /// iOS: Photos (Camera Roll and Camera)
         /// UWP: None
@@ -77,12 +71,6 @@
         /// UWP: None
         /// </summary>
         Photos,
-        /// <summary>
-        /// Android: Nothing
-        /// iOS: Reminders
-        /// UWP: None
-        /// </summary>
-        Reminders,
         /// <summary>
         /// Android: Body Sensors
         /// iOS: CoreMotion

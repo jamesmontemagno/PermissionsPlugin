@@ -34,9 +34,6 @@ namespace PermissionsTest
 			var status = PermissionStatus.Unknown;
 			switch (((Button)sender).StyleId)
 			{
-				case "Calendar":
-					status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Calendar);
-					break;
 				case "Camera":
 					status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Camera);
 					break;
@@ -58,9 +55,6 @@ namespace PermissionsTest
 				case "Photos":
 					status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Photos);
 					break;
-				case "Reminders":
-					status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Reminders);
-					break;
 				case "Sensors":
 					status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Sensors);
 					break;
@@ -81,9 +75,6 @@ namespace PermissionsTest
 
 					switch (((Button)sender).StyleId)
 					{
-						case "Calendar":
-							status = (await CrossPermissions.Current.RequestPermissionsAsync(Permission.Calendar))[Permission.Calendar];
-							break;
 						case "Camera":
 							status = (await CrossPermissions.Current.RequestPermissionsAsync(Permission.Camera))[Permission.Camera];
 							break;
@@ -104,9 +95,6 @@ namespace PermissionsTest
 							break;
 						case "Photos":
 							status = (await CrossPermissions.Current.RequestPermissionsAsync(Permission.Photos))[Permission.Photos];
-							break;
-						case "Reminders":
-							status = (await CrossPermissions.Current.RequestPermissionsAsync(Permission.Reminders))[Permission.Reminders];
 							break;
 						case "Sensors":
 							status = (await CrossPermissions.Current.RequestPermissionsAsync(Permission.Sensors))[Permission.Sensors];
