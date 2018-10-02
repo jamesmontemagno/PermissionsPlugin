@@ -57,8 +57,6 @@ namespace Plugin.Permissions
 				case Permission.LocationAlways:
 				case Permission.LocationWhenInUse:
                     return Task.FromResult(GetLocationPermissionStatus(permission));
-				case Permission.MediaLibrary:
-					return Task.FromResult(MediaLibraryPermissionStatus);
 				case Permission.Microphone:
                     return Task.FromResult(GetAVPermissionStatus(AVMediaType.Audio));
                 //case Permission.NotificationsLocal:
@@ -110,9 +108,6 @@ namespace Plugin.Permissions
                     case Permission.Location:
                         results.Add(permission, await RequestLocationPermission(permission));
                         break;
-					case Permission.MediaLibrary:
-						results.Add(permission, await RequestMediaLibraryPermission());
-						break;
                     case Permission.Microphone:
                         try
                         {
@@ -549,65 +544,6 @@ namespace Plugin.Permissions
         }
 		#endregion
 
-		#region MediaLib
-		PermissionStatus MediaLibraryPermissionStatus
-		{
-			get
-			{
-				//Opening settings only open in iOS 9.3+
-				if (!UIDevice.CurrentDevice.CheckSystemVersion(9, 3))
-					return PermissionStatus.Unknown;
-
-				var status = MPMediaLibrary.AuthorizationStatus;
-				switch (status)
-				{
-					case MPMediaLibraryAuthorizationStatus.Authorized:
-						return PermissionStatus.Granted;
-					case MPMediaLibraryAuthorizationStatus.Denied:
-						return PermissionStatus.Denied;
-					case MPMediaLibraryAuthorizationStatus.Restricted:
-						return PermissionStatus.Restricted;
-					default:
-						return PermissionStatus.Unknown;
-				}
-			}
-		}
-
-		Task<PermissionStatus> RequestMediaLibraryPermission()
-		{
-
-			//Opening settings only open in iOS 9.3+
-			if (!UIDevice.CurrentDevice.CheckSystemVersion(9, 3))
-				return Task.FromResult(PermissionStatus.Unknown);
-
-			if (MediaLibraryPermissionStatus != PermissionStatus.Unknown)
-				return Task.FromResult(MediaLibraryPermissionStatus);
-
-			var tcs = new TaskCompletionSource<PermissionStatus>();
-
-			MPMediaLibrary.RequestAuthorization(status =>
-			{
-				switch (status)
-				{
-					case MPMediaLibraryAuthorizationStatus.Authorized:
-						tcs.TrySetResult(PermissionStatus.Granted);
-						break;
-					case MPMediaLibraryAuthorizationStatus.Denied:
-						tcs.TrySetResult(PermissionStatus.Denied);
-						break;
-					case MPMediaLibraryAuthorizationStatus.Restricted:
-						tcs.TrySetResult(PermissionStatus.Restricted);
-						break;
-					default:
-						tcs.TrySetResult(PermissionStatus.Unknown);
-						break;
-				}
-			});
-
-			return tcs.Task;
-		}
-
-		#endregion
 
 		public bool OpenAppSettings()
         {
