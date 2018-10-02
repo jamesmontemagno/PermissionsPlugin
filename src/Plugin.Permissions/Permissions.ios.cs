@@ -11,7 +11,6 @@ using UIKit;
 using Photos;
 using System.Diagnostics;
 using Speech;
-using MediaPlayer;
 
 namespace Plugin.Permissions
 {
