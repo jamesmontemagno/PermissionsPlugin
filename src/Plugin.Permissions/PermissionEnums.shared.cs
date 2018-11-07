@@ -36,12 +36,19 @@
         /// The unknown permission only used for return type, never requested
         /// </summary>
         Unknown,
-        /// <summary>
-        /// Android: Camera
-        /// iOS: Photos (Camera Roll and Camera)
-        /// UWP: None
-        /// </summary>
-        Camera,
+		/// <summary>	       
+		/// Android: None	
+		/// iOS: None
+		/// UWP: None	
+		/// </summary>	
+		Calendar,
+		/// <summary>
+		/// <summary>
+		/// Android: Camera
+		/// iOS: Photos (Camera Roll and Camera)
+		/// UWP: None
+		/// </summary>
+		Camera,
         /// <summary>
         /// Android: Contacts
         /// iOS: AddressBook
@@ -71,12 +78,19 @@
         /// UWP: None
         /// </summary>
         Photos,
-        /// <summary>
-        /// Android: Body Sensors
-        /// iOS: CoreMotion
-        /// UWP: DeviceAccessInformation
-        /// </summary>
-        Sensors,
+		/// <summary>
+		/// Android: Nothing	
+		/// iOS: Nothing	
+		/// UWP: None	
+		/// </summary>	
+		Reminders,
+		/// <summary>
+		/// <summary>
+		/// Android: Body Sensors
+		/// iOS: CoreMotion
+		/// UWP: DeviceAccessInformation
+		/// </summary>
+		Sensors,
         /// <summary>
         /// Android: Sms
         /// iOS: Nothing
@@ -105,6 +119,12 @@
 		/// iOS: CoreLocation - WhenInUse
 		/// UWP: Geolocator
 		/// </summary>
-		LocationWhenInUse
+		LocationWhenInUse,
+		/// <summary>	
+		/// Android: None	
+		/// iOS: None	
+		/// UWP: None	
+		/// </summary>	
+		MediaLibrary
 	}
 }
