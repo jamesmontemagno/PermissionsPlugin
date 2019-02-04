@@ -243,6 +243,9 @@ namespace Plugin.Permissions
         {
             switch (permission)
             {
+				case Manifest.Permission.ReadCalendar:
+				case Manifest.Permission.WriteCalendar:
+					return Permission.Calendar;
                 case Manifest.Permission.Camera:
                     return Permission.Camera;
                 case Manifest.Permission.ReadContacts:
@@ -283,7 +286,15 @@ namespace Plugin.Permissions
             var permissionNames = new List<string>();
             switch(permission)
             {
-                case Permission.Camera:
+				case Permission.Calendar:
+					{
+						if (HasPermissionInManifest(Manifest.Permission.ReadCalendar))
+							permissionNames.Add(Manifest.Permission.ReadCalendar);
+						if (HasPermissionInManifest(Manifest.Permission.WriteCalendar))
+							permissionNames.Add(Manifest.Permission.WriteCalendar);
+					}
+					break;
+				case Permission.Camera:
                    {
                         if(HasPermissionInManifest(Manifest.Permission.Camera))
                             permissionNames.Add(Manifest.Permission.Camera);

@@ -37,9 +37,9 @@
         /// </summary>
         Unknown,
 		/// <summary>	       
-		/// Android: None	
-		/// iOS: None
-		/// UWP: None	
+		/// Android: Calendar	
+		/// iOS: None/Not Supported
+		/// UWP: None/Not Supported	
 		/// </summary>	
 		Calendar,
 		/// <summary>
@@ -121,9 +121,9 @@
 		/// </summary>
 		LocationWhenInUse,
 		/// <summary>	
-		/// Android: None	
-		/// iOS: None	
-		/// UWP: None	
+		/// Android: None/Not Supported	
+		/// iOS: None/Not Supported	
+		/// UWP: None/Not Supported	
 		/// </summary>	
 		MediaLibrary
 	}
