@@ -1,23 +1,54 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PermissionsTest.GeolocationPage"
-             Title="Permissions Test">
-	<ScrollView>
-		<StackLayout Padding="30" Spacing="10">
-			<Button Text="Open Settings" Clicked="OpenSettings_Clicked"/>
-			<Button Text="Get Location" Clicked="Button_OnClicked"></Button>
-			<Label x:Name="LabelGeolocation"></Label>
-			<Button Text="LocationAlways" StyleId="LocationAlways" Clicked="ButtonPermission_OnClicked"></Button>
-			<Button Text="LocationWhenInUse" StyleId="LocationWhenInUse" Clicked="ButtonPermission_OnClicked"></Button>
-			<Button Text="Camera" StyleId="Camera" Clicked="ButtonPermission_OnClicked"></Button>
-			<Button Text="Contacts" StyleId="Contacts" Clicked="ButtonPermission_OnClicked"></Button>
-			<Button Text="Microphone" StyleId="Microphone" Clicked="ButtonPermission_OnClicked"></Button>
-			<Button Text="Phone" StyleId="Phone" Clicked="ButtonPermission_OnClicked"></Button>
-			<Button Text="Photos" StyleId="Photos" Clicked="ButtonPermission_OnClicked"></Button>
-			<Button Text="Sensors" StyleId="Sensors" Clicked="ButtonPermission_OnClicked"></Button>
-			<Button Text="Sms" StyleId="Sms" Clicked="ButtonPermission_OnClicked"></Button>
-			<Button Text="Storage" StyleId="Storage" Clicked="ButtonPermission_OnClicked"></Button>
-		</StackLayout>
-	</ScrollView>
+<ContentPage
+    x:Class="PermissionsTest.GeolocationPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Permissions Test">
+    <ScrollView>
+        <StackLayout Padding="30" Spacing="10">
+            <Button Clicked="Button_Clicked" Text="Open Settings" />
+            <Button Clicked="Button_OnClicked" Text="Get Location" />
+            <Label x:Name="LabelGeolocation" />
+            <Button
+                Clicked="ButtonPermission_OnClicked"
+                StyleId="LocationAlways"
+                Text="LocationAlways" />
+            <Button
+                Clicked="ButtonPermission_OnClicked"
+                StyleId="LocationWhenInUse"
+                Text="LocationWhenInUse" />
+            <Button
+                Clicked="ButtonPermission_OnClicked"
+                StyleId="Camera"
+                Text="Camera" />
+            <Button
+                Clicked="ButtonPermission_OnClicked"
+                StyleId="Contacts"
+                Text="Contacts" />
+            <Button
+                Clicked="ButtonPermission_OnClicked"
+                StyleId="Microphone"
+                Text="Microphone" />
+            <Button
+                Clicked="ButtonPermission_OnClicked"
+                StyleId="Phone"
+                Text="Phone" />
+            <Button
+                Clicked="ButtonPermission_OnClicked"
+                StyleId="Photos"
+                Text="Photos" />
+            <Button
+                Clicked="ButtonPermission_OnClicked"
+                StyleId="Sensors"
+                Text="Sensors" />
+            <Button
+                Clicked="ButtonPermission_OnClicked"
+                StyleId="Sms"
+                Text="Sms" />
+            <Button
+                Clicked="ButtonPermission_OnClicked"
+                StyleId="Storage"
+                Text="Storage" />
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

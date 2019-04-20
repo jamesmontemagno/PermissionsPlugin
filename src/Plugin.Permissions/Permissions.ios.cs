@@ -11,7 +11,12 @@ using UIKit;
 using Photos;
 using System.Diagnostics;
 using Speech;
+using MediaPlayer;
+using EventKit;
 
+// r2_au cheered 1000 April 19 2019
+
+[assembly: LinkerSafe]
 namespace Plugin.Permissions
 {
 	/// <summary>
@@ -19,11 +24,6 @@ namespace Plugin.Permissions
 	/// </summary>
 	public class PermissionsImplementation : IPermissions
     {
-
-        CLLocationManager locationManager;
-        ABAddressBook addressBook;
-        CMMotionActivityManager activityManager;
-
 		/// <summary>
 		/// Gets the current permissions implementation
 		/// </summary>
@@ -48,7 +48,9 @@ namespace Plugin.Permissions
         {
             switch (permission)
             {
-                case Permission.Camera:
+				case Permission.Calendar:
+					return Task.FromResult(GetEventPermissionStatus(EKEntityType.Event));
+				case Permission.Camera:
                     return Task.FromResult(GetAVPermissionStatus(AVMediaType.Video));
                 case Permission.Contacts:
                     return Task.FromResult(ContactsPermissionStatus);
@@ -56,19 +58,19 @@ namespace Plugin.Permissions
 				case Permission.LocationAlways:
 				case Permission.LocationWhenInUse:
                     return Task.FromResult(GetLocationPermissionStatus(permission));
+				case Permission.MediaLibrary:
+					return Task.FromResult(MediaLibraryPermissionStatus);
 				case Permission.Microphone:
                     return Task.FromResult(GetAVPermissionStatus(AVMediaType.Audio));
-                //case Permission.NotificationsLocal:
-                //    break;
-                //case Permission.NotificationsRemote:
-                //    break;
                 case Permission.Photos:
                     return Task.FromResult(PhotosPermissionStatus);
-                case Permission.Sensors:
+				case Permission.Reminders:
+					return Task.FromResult(GetEventPermissionStatus(EKEntityType.Reminder));
+				case Permission.Sensors:
 					return Task.FromResult(SensorsPermissionStatus);
                 case Permission.Speech:
                     return Task.FromResult(SpeechPermissionStatus);
-            }
+			}
             return Task.FromResult(PermissionStatus.Granted);
         }
 
@@ -87,42 +89,33 @@ namespace Plugin.Permissions
 
                 switch (permission)
                 {
-                    case Permission.Camera:
-                        try
-                        {
-                            var authCamera = await AVCaptureDevice.RequestAccessForMediaTypeAsync(AVMediaType.Video);
-                            results.Add(permission, (authCamera ? PermissionStatus.Granted : PermissionStatus.Denied));
-                        }
-                        catch(Exception ex)
-                        {
-                            Debug.WriteLine("Unable to get camera permission: " + ex);
-                            results.Add(permission, PermissionStatus.Unknown);
-                        }
-                        break;
-                    case Permission.Contacts:
-                        results.Add(permission, await RequestContactsPermission());
-                        break;
+					case Permission.Calendar:
+						results.Add(permission, await RequestEventPermission(EKEntityType.Event));
+						break;
+					case Permission.Camera:
+						results.Add(permission, await RequestAVPermissionStatusAsync(AVMediaType.Video));
+						break;
+					case Permission.Contacts:
+						results.Add(permission, await RequestContactsPermission());
+						break;
 					case Permission.LocationWhenInUse:
 					case Permission.LocationAlways:
                     case Permission.Location:
                         results.Add(permission, await RequestLocationPermission(permission));
                         break;
-                    case Permission.Microphone:
-                        try
-                        {
-                            var authMic = await AVCaptureDevice.RequestAccessForMediaTypeAsync(AVMediaType.Audio);
-                            results.Add(permission, (authMic ? PermissionStatus.Granted : PermissionStatus.Denied));
-                        }
-                        catch(Exception ex)
-                        {
-                            Debug.WriteLine("Unable to get microphone permission: " + ex);
-                            results.Add(permission, PermissionStatus.Unknown);
-                        }
-                        break;
-                    case Permission.Photos:
+					case Permission.MediaLibrary:
+						results.Add(permission, await RequestMediaLibraryPermission());
+						break;
+					case Permission.Microphone:
+						results.Add(permission, await RequestAVPermissionStatusAsync(AVMediaType.Audio));
+						break;
+					case Permission.Photos:
                         results.Add(permission, await RequestPhotosPermission());
                         break;
-                    case Permission.Sensors:
+					case Permission.Reminders:
+						results.Add(permission, await RequestEventPermission(EKEntityType.Reminder));
+						break;
+					case Permission.Sensors:
                         results.Add(permission, await RequestSensorsPermission());
                         break;
                     case Permission.Speech:
@@ -137,11 +130,25 @@ namespace Plugin.Permissions
             return results;
         }
 
+		internal static async Task<PermissionStatus> RequestAVPermissionStatusAsync(NSString mediaType)
+		{
+			try
+			{
+				var auth = await AVCaptureDevice.RequestAccessForMediaTypeAsync(mediaType);
+				return auth ? PermissionStatus.Granted : PermissionStatus.Denied;
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"Unable to get {mediaType} permission: " + ex);
+				return PermissionStatus.Unknown;
+			}
+		}
 
 
-        #region AV: Camera and Microphone
 
-        PermissionStatus GetAVPermissionStatus(NSString mediaType)
+		#region AV: Camera and Microphone
+
+		internal static PermissionStatus GetAVPermissionStatus(NSString mediaType)
         {
             var status = AVCaptureDevice.GetAuthorizationStatus(mediaType);
             switch (status)
@@ -156,10 +163,10 @@ namespace Plugin.Permissions
                     return PermissionStatus.Unknown;
             }
         }
-        #endregion
+		#endregion
 
-        #region Contacts
-        PermissionStatus ContactsPermissionStatus
+		#region Contacts
+		internal static PermissionStatus ContactsPermissionStatus
         {
             get
             {
@@ -178,13 +185,13 @@ namespace Plugin.Permissions
             }
         }
 
-        Task<PermissionStatus> RequestContactsPermission()
+		internal static Task<PermissionStatus> RequestContactsPermission()
         {
 
             if (ContactsPermissionStatus != PermissionStatus.Unknown)
                 return Task.FromResult(ContactsPermissionStatus);
 
-            addressBook = new ABAddressBook();
+            var addressBook = new ABAddressBook();
 
             var tcs = new TaskCompletionSource<PermissionStatus>();
 
@@ -196,11 +203,13 @@ namespace Plugin.Permissions
 
             return tcs.Task;
         }
-        #endregion
+		#endregion
 
 		#region Location
+
+		internal static CLLocationManager locationManager;
 		public static TimeSpan LocationPermissionTimeout { get; set; } = new TimeSpan(0, 0, 8);
-		Task<PermissionStatus> RequestLocationPermission(Permission permission = Permission.Location)
+		internal static Task<PermissionStatus> RequestLocationPermission(Permission permission = Permission.Location)
 		{
 			if(CLLocationManager.Status == CLAuthorizationStatus.AuthorizedWhenInUse && permission == Permission.LocationAlways)
 			{
@@ -285,7 +294,7 @@ namespace Plugin.Permissions
 			return tcs.Task;
         }
 
-		async Task<T> WithTimeout<T>(Task<T> task, TimeSpan timeSpan)
+		internal static async Task<T> WithTimeout<T>(Task<T> task, TimeSpan timeSpan)
 		{
 			var retTask = await Task.WhenAny(task, Task.Delay(timeSpan))
 				.ConfigureAwait(false);
@@ -295,7 +304,7 @@ namespace Plugin.Permissions
 
 
 
-		PermissionStatus GetLocationPermissionStatus(Permission permission)
+		internal static PermissionStatus GetLocationPermissionStatus(Permission permission)
         {
             
             if (!CLLocationManager.LocationServicesEnabled)
@@ -351,10 +360,10 @@ namespace Plugin.Permissions
             
 
         }
-        #endregion
+		#endregion
 
-        #region Notifications
-        /*PermissionStatus NotificationLocalPermissionState
+		#region Notifications
+		/*PermissionStatus NotificationLocalPermissionState
         {
             get
             {
@@ -376,10 +385,10 @@ namespace Plugin.Permissions
 
             NSNotificationCenter.DefaultCenter.AddObserver(new NSString("DidRegisterUserNotificationSettings")
         }*/
-        #endregion
+		#endregion
 
-        #region Photos
-        PermissionStatus PhotosPermissionStatus
+		#region Photos
+		internal static PermissionStatus PhotosPermissionStatus
         {
             get
             {
@@ -398,7 +407,7 @@ namespace Plugin.Permissions
             }
         }
 
-        Task<PermissionStatus> RequestPhotosPermission()
+		internal static Task<PermissionStatus> RequestPhotosPermission()
         {
 
             if (PhotosPermissionStatus != PermissionStatus.Unknown)
@@ -428,11 +437,11 @@ namespace Plugin.Permissions
             return tcs.Task;
         }
 
-        #endregion
+		#endregion
 
-        #region Sensors
+		#region Sensors
 
-		PermissionStatus SensorsPermissionStatus
+		internal static PermissionStatus SensorsPermissionStatus
 		{
 			get
 			{
@@ -463,12 +472,12 @@ namespace Plugin.Permissions
 				return sensorStatus;
 			}
 		}
-        async Task<PermissionStatus> RequestSensorsPermission()
+		internal static async Task<PermissionStatus> RequestSensorsPermission()
         {
 			if (SensorsPermissionStatus != PermissionStatus.Unknown)
 				return SensorsPermissionStatus;		
 
-            activityManager = new CMMotionActivityManager();
+            var activityManager = new CMMotionActivityManager();
 
             try
             {
@@ -487,7 +496,7 @@ namespace Plugin.Permissions
         #endregion
 
         #region Speech
-        Task<PermissionStatus> RequestSpeechPermission()
+        internal static Task<PermissionStatus> RequestSpeechPermission()
         {
             if (SpeechPermissionStatus != PermissionStatus.Unknown)
                 return Task.FromResult(SpeechPermissionStatus);
@@ -521,9 +530,9 @@ namespace Plugin.Permissions
             return tcs.Task;
         }
 
-        
 
-        PermissionStatus SpeechPermissionStatus
+
+		internal static PermissionStatus SpeechPermissionStatus
         {
             get
             {
@@ -544,6 +553,98 @@ namespace Plugin.Permissions
 		#endregion
 
 
+		#region MediaLib	
+		internal static PermissionStatus MediaLibraryPermissionStatus
+		{
+			get
+			{
+				//Opening settings only open in iOS 9.3+	
+				if (!UIDevice.CurrentDevice.CheckSystemVersion(9, 3))
+					return PermissionStatus.Unknown;
+
+				var status = MPMediaLibrary.AuthorizationStatus;
+				switch (status)
+				{
+					case MPMediaLibraryAuthorizationStatus.Authorized:
+						return PermissionStatus.Granted;
+					case MPMediaLibraryAuthorizationStatus.Denied:
+						return PermissionStatus.Denied;
+					case MPMediaLibraryAuthorizationStatus.Restricted:
+						return PermissionStatus.Restricted;
+					default:
+						return PermissionStatus.Unknown;
+				}
+			}
+		}
+
+		internal static Task<PermissionStatus> RequestMediaLibraryPermission()
+		{
+
+			//Opening settings only open in iOS 9.3+	
+			if (!UIDevice.CurrentDevice.CheckSystemVersion(9, 3))
+				return Task.FromResult(PermissionStatus.Unknown);
+
+			if (MediaLibraryPermissionStatus != PermissionStatus.Unknown)
+				return Task.FromResult(MediaLibraryPermissionStatus);
+
+			var tcs = new TaskCompletionSource<PermissionStatus>();
+
+			MPMediaLibrary.RequestAuthorization(status =>
+			{
+				switch (status)
+				{
+					case MPMediaLibraryAuthorizationStatus.Authorized:
+						tcs.TrySetResult(PermissionStatus.Granted);
+						break;
+					case MPMediaLibraryAuthorizationStatus.Denied:
+						tcs.TrySetResult(PermissionStatus.Denied);
+						break;
+					case MPMediaLibraryAuthorizationStatus.Restricted:
+						tcs.TrySetResult(PermissionStatus.Restricted);
+						break;
+					default:
+						tcs.TrySetResult(PermissionStatus.Unknown);
+						break;
+				}
+			});
+
+			return tcs.Task;
+		}
+
+		#endregion
+
+		#region Events
+		internal static PermissionStatus GetEventPermissionStatus(EKEntityType eventType)
+		{
+			var status = EKEventStore.GetAuthorizationStatus(eventType);
+			switch (status)
+			{
+				case EKAuthorizationStatus.Authorized:
+					return PermissionStatus.Granted;
+				case EKAuthorizationStatus.Denied:
+					return PermissionStatus.Denied;
+				case EKAuthorizationStatus.Restricted:
+					return PermissionStatus.Restricted;
+				default:
+					return PermissionStatus.Unknown;
+			}
+
+		}
+
+		internal static async Task<PermissionStatus> RequestEventPermission(EKEntityType eventType)
+		{
+
+			if (GetEventPermissionStatus(eventType) == PermissionStatus.Granted)
+				return PermissionStatus.Granted;
+
+			var eventStore = new EKEventStore();
+
+			var results = await eventStore.RequestAccessAsync(eventType);
+
+			return results.Item1 ? PermissionStatus.Granted : PermissionStatus.Denied;
+		}
+#endregion
+
 		public bool OpenAppSettings()
         {
             //Opening settings only open in iOS 8+
@@ -560,5 +661,12 @@ namespace Plugin.Permissions
                 return false;
             }
         }
-    }
+
+		public Task<PermissionStatus> CheckPermissionStatusAsync<T>() where T : BasePermission, new () =>
+			new T().CheckPermissionStatusAsync();
+
+		public Task<PermissionStatus> RequestPermissionAsync<T>() where T : BasePermission, new() =>
+			new T().RequestPermissionAsync();
+
+	}
 }
