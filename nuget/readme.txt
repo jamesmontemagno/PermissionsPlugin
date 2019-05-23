@@ -1,5 +1,9 @@
 Permissions Readme
 
+Introducing Version 5.0! There is a brand new API that introduces completely linker safe permissions for iOS, which is awesome!
+
+Please read: https://github.com/jamesmontemagno/PermissionsPlugin/blob/master/README.md for the new API
+
 
 **IMPORTANT**
 Android:
@@ -22,10 +26,3 @@ It is highly recommended that you use a custom Application that are outlined in 
 
 ### iOS Specific
 Based on what permissions you are using, you must add information into your info.plist. Please read the [Working with Security and Privacy guide for keys you will need to add](https://developer.xamarin.com/guides/ios/application_fundamentals/security-privacy-enhancements/). 
-
-Due to API usage it is required to add the Calendar permission :(
-```
-<key>NSCalendarsUsageDescription</key>
-<string>Needs Calendar Permission</string>
-```
-Even though your app may not use calendar at all. I am looking into a workaround for this in the future.
