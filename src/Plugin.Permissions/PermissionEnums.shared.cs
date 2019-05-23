@@ -38,7 +38,7 @@
         Unknown,
 		/// <summary>	       
 		/// Android: Calendar	
-		/// iOS: None/Not Supported
+		/// iOS: Calendar
 		/// UWP: None/Not Supported	
 		/// </summary>	
 		Calendar,
@@ -80,7 +80,7 @@
         Photos,
 		/// <summary>
 		/// Android: Nothing	
-		/// iOS: Nothing	
+		/// iOS: Reminders	
 		/// UWP: None	
 		/// </summary>	
 		Reminders,
@@ -122,7 +122,7 @@
 		LocationWhenInUse,
 		/// <summary>	
 		/// Android: None/Not Supported	
-		/// iOS: None/Not Supported	
+		/// iOS: Media Library
 		/// UWP: None/Not Supported	
 		/// </summary>	
 		MediaLibrary

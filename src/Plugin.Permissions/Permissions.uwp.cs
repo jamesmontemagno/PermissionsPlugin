@@ -112,5 +112,11 @@ namespace Plugin.Permissions
         }
 
         public bool OpenAppSettings() => false;
-    }
+
+		public Task<PermissionStatus> CheckPermissionStatusAsync<T>() where T : BasePermission, new() =>
+			new T().CheckPermissionStatusAsync();
+
+		public Task<PermissionStatus> RequestPermissionAsync<T>() where T : BasePermission, new() =>
+			new T().RequestPermissionAsync();
+	}
 }

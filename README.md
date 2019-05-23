@@ -43,174 +43,82 @@ It is highly recommended that you use a custom Application that are outlined in 
 ### iOS Specific
 Based on what permissions you are using, you must add information into your info.plist. Please read the [Working with Security and Privacy guide for keys you will need to add](https://developer.xamarin.com/guides/ios/application_fundamentals/security-privacy-enhancements/). 
 
-Due to API usage it is required to add the Calendar permission :(
-```
-<key>NSCalendarsUsageDescription</key>
-<string>Needs Calendar Permission</string>
-```
-
-You may also see this for: `NSBluetoothPeripheralUsageDescription` which you may also have to add.
-
-Even though your app may not use calendar at all. I am looking into a workaround for this in the future.
-
 
 ### API Usage
 
-Call **CrossPermissions.Current** from any project or PCL to gain access to APIs.
+You are able to check and requests permissions with just a few lines of code:
 
-**Should show request rationale**
+Check permission: 
+
 ```csharp
-/// <summary>
-/// Request to see if you should show a rationale for requesting permission
-/// Only on Android
-/// </summary>
-/// <returns>True or false to show rationale</returns>
-/// <param name="permission">Permission to check.</param>
-Task<bool> ShouldShowRequestPermissionRationaleAsync(Permission permission);
+PermissionStatus status = await CrossPermissions.Current.CheckPermissionStatusAsync<CalendarPermission>();
 ```
 
-**CheckPermissionStatus**
+Request permission:
 ```csharp
-/// <summary>
-/// Determines whether this instance has permission the specified permission.
-/// </summary>
-/// <returns><c>true</c> if this instance has permission the specified permission; otherwise, <c>false</c>.</returns>
-/// <param name="permission">Permission to check.</param>
-Task<PermissionStatus> CheckPermissionStatusAsync(Permission permission);
+PermissionStatus status = await CrossPermissions.Current.RequestPermissionAsync<CalendarPermission>();
 ```
 
-**RequestPermissions**
+Additionally on Android there is a situation where you may want to detect if the user has already declined the permission and you should show your own pop up:
+
 ```csharp
-/// <summary>
-/// Requests the permissions from the users
-/// </summary>
-/// <returns>The permissions and their status.</returns>
-/// <param name="permissions">Permissions to request.</param>
-Task<Dictionary<Permission, PermissionStatus>> RequestPermissionsAsync(params Permission[] permissions);
+bool shouldShow = await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Calendar);
 ```
+
+#### Available Permissions
+
+* CalendarPermission
+* CameraPermission
+* ContactsPermission
+* LocationPermission
+* LocationAlwaysPermission
+* LocationWhenInUsePermission
+* MediaLibraryPermission
+* MicrophonePermission
+* PhonePermission
+* PhotosPermission
+* RemindersPermission
+* SensorsPermission
+* SmsPermission
+* StoragePermission
+* SpeechPermission
+
 
 ### In Action
-Here is how you may use it with the Geolocator Plugin:
+Here is how you may use it with geolocation:
 
 ```csharp
 try
 {
-    var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location);
-    if (status != PermissionStatus.Granted)
-    {
-        if(await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Location))
-        {
-            await DisplayAlert("Need location", "Gunna need that location", "OK");
-        }
+	var status = await CrossPermissions.Current.CheckPermissionStatusAsync<LocationPermission>();
+	if (status != PermissionStatus.Granted)
+	{
+		if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Location))
+		{
+			await DisplayAlert("Need location", "Gunna need that location", "OK");
+		}
 
-        var results = await CrossPermissions.Current.RequestPermissionsAsync(Permission.Location);
-		//Best practice to always check that the key exists
-		if(results.ContainsKey(Permission.Location))
-        	status = results[Permission.Location];
-    }
+		status = await CrossPermissions.Current.RequestPermissionAsync<LocationPermission>();
+	}
 
-    if (status == PermissionStatus.Granted)
-    {
-        var results = await CrossGeolocator.Current.GetPositionAsync(10000);
-        LabelGeolocation.Text = "Lat: " + results.Latitude + " Long: " + results.Longitude;
-    }
-    else if(status != PermissionStatus.Unknown)
-    {
-        await DisplayAlert("Location Denied", "Can not continue, try again.", "OK");
-    }
+	if (status == PermissionStatus.Granted)
+	{
+		//Query permission
+	}
+	else if (status != PermissionStatus.Unknown)
+	{
+		//location denied
+	}
 }
 catch (Exception ex)
 {
-
-    LabelGeolocation.Text = "Error: " + ex;
+  //Something went wrong
 }
 ```
 
-### Available Permissions
-```csharp
-/// <summary>
-/// Permission group that can be requested
-/// </summary>
-public enum Permission
-{
-    /// <summary>
-    /// The unknown permission only used for return type, never requested
-    /// </summary>
-    Unknown,
-    /// <summary>
-    /// Android: Calendar
-    /// iOS: Calendar (Events)
-    /// UWP: None
-    /// </summary>
-    Calendar,
-    /// <summary>
-    /// Android: Camera
-    /// iOS: Photos (Camera Roll and Camera)
-    /// UWP: None
-    /// </summary>
-    Camera,
-    /// <summary>
-    /// Android: Contacts
-    /// iOS: AddressBook
-    /// UWP: ContactManager
-    /// </summary>
-    Contacts,
-    /// <summary>
-    /// Android: Fine and Coarse Location
-    /// iOS: CoreLocation (Always and WhenInUse)
-    /// UWP: Geolocator
-    /// </summary>
-    Location,
-    /// <summary>
-    /// Android: Microphone
-    /// iOS: Microphone
-    /// UWP: None
-    /// </summary>
-    Microphone,
-    /// <summary>
-    /// Android: Phone
-    /// iOS: Nothing
-    /// UWP: None
-    /// </summary>
-    Phone,
-    /// <summary>
-    /// Android: Nothing
-    /// iOS: Photos
-    /// UWP: None
-    /// </summary>
-    Photos,
-    /// <summary>
-    /// Android: Nothing
-    /// iOS: Reminders
-    /// UWP: None
-    /// </summary>
-    Reminders,
-    /// <summary>
-    /// Android: Body Sensors
-    /// iOS: CoreMotion
-    /// UWP: Device Access Sensor Class
-    /// </summary>
-    Sensors,
-    /// <summary>
-    /// Android: Sms
-    /// iOS: Nothing
-    /// UWP: None
-    /// </summary>
-    Sms,
-    /// <summary>
-    /// Android: External Storage
-    /// iOS: Nothing
-    /// UWP: None
-    /// </summary>
-    Storage
-    /// <summary>
-    /// Android: Microphone
-    /// iOS: Speech
-    /// UWP: None
-    /// </summary>
-    Speech
-}
-```
+
+
+
 Read more about android permissions: http://developer.android.com/guide/topics/security/permissions.html#normal-dangerous
 
 

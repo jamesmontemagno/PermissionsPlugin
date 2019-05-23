@@ -1,6 +1,8 @@
 ﻿using Plugin.Permissions.Abstractions;
 using System;
 
+// peymanr34 created this snippet! April 19, 2019
+
 namespace Plugin.Permissions
 {
     /// <summary>
