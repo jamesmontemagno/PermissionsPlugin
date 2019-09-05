@@ -1,7 +1,8 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.61">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard1.0;netstandard2.0;MonoAndroid70;MonoAndroid71;MonoAndroid80;MonoAndroid81;MonoAndroid90;Xamarin.iOS10;uap10.0.16299;</TargetFrameworks>
+		<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard1.0;netstandard2.0;MonoAndroid70;MonoAndroid71;MonoAndroid80;MonoAndroid81;MonoAndroid90;Xamarin.iOS10;Xamarin.tvOS10;uap10.0.16299;</TargetFrameworks>
+		<TargetFrameworks Condition=" '$(OS)' == 'Unix' ">netstandard1.0;netstandard2.0;MonoAndroid70;MonoAndroid71;MonoAndroid80;MonoAndroid81;MonoAndroid90;Xamarin.iOS10;Xamarin.tvOS10;</TargetFrameworks>
 		<AssemblyName>Plugin.Permissions</AssemblyName>
 		<RootNamespace>Plugin.Permissions</RootNamespace>
 		<Product>$(AssemblyName) ($(TargetFramework))</Product>
@@ -26,7 +27,7 @@
 		<RepositoryUrl>https://github.com/jamesmontemagno/PermissionsPlugin</RepositoryUrl>
 		<PackageReleaseNotes>See: https://github.com/jamesmontemagno/PermissionsPlugin </PackageReleaseNotes>
 
-    
+
 		<NeutralLanguage>en</NeutralLanguage>
 		<LangVersion>default</LangVersion>
 		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -49,7 +50,7 @@
 	<ItemGroup Condition=" '$(Configuration)'=='Release' ">
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
 	</ItemGroup>
-	<ItemGroup>		
+	<ItemGroup>
     <None Include="..\..\nuget\readme.txt" PackagePath="readme.txt" Pack="true" />
 		<Compile Include="**\*.shared.cs" />
 	</ItemGroup>
@@ -70,6 +71,10 @@
 
 	<ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
 		<Compile Include="**\*.ios.cs" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.tvOS')) ">
+		<Compile Include="**\*.tvos.cs" />
 	</ItemGroup>
 
 
