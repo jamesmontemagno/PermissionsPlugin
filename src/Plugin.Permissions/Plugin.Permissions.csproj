@@ -1,8 +1,11 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.61">
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.41">
 
 	<PropertyGroup>
-		<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard1.0;netstandard2.0;MonoAndroid70;MonoAndroid71;MonoAndroid80;MonoAndroid81;MonoAndroid90;Xamarin.iOS10;Xamarin.tvOS10;uap10.0.16299;</TargetFrameworks>
-		<TargetFrameworks Condition=" '$(OS)' == 'Unix' ">netstandard1.0;netstandard2.0;MonoAndroid70;MonoAndroid71;MonoAndroid80;MonoAndroid81;MonoAndroid90;Xamarin.iOS10;Xamarin.tvOS10;</TargetFrameworks>
+		<TargetFrameworks>netstandard1.0;netstandard2.0;MonoAndroid70;MonoAndroid71;MonoAndroid80;MonoAndroid81;MonoAndroid90;Xamarin.iOS10;Xamarin.tvOS10;</TargetFrameworks>
+		<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.16299;</TargetFrameworks>
+	</PropertyGroup>
+	
+	<PropertyGroup>
 		<AssemblyName>Plugin.Permissions</AssemblyName>
 		<RootNamespace>Plugin.Permissions</RootNamespace>
 		<Product>$(AssemblyName) ($(TargetFramework))</Product>
@@ -26,19 +29,18 @@
 		<Copyright>Copyright 2019</Copyright>
 		<RepositoryUrl>https://github.com/jamesmontemagno/PermissionsPlugin</RepositoryUrl>
 		<PackageReleaseNotes>See: https://github.com/jamesmontemagno/PermissionsPlugin </PackageReleaseNotes>
-
-
 		<NeutralLanguage>en</NeutralLanguage>
 		<LangVersion>default</LangVersion>
 		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 		<DebugType>portable</DebugType>
 		<DefineConstants>$(DefineConstants);</DefineConstants>
-
 	</PropertyGroup>
+	
 	<PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
 		<DebugSymbols>true</DebugSymbols>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
 	</PropertyGroup>
+	
 	<PropertyGroup Condition=" '$(Configuration)'=='Release' ">
 		<!-- sourcelink: Declare that the Repository URL can be published to NuSpec -->
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -47,9 +49,11 @@
 		<!-- sourcelink: Include PDB in the built .nupkg -->
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 	</PropertyGroup>
+	
 	<ItemGroup Condition=" '$(Configuration)'=='Release' ">
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
 	</ItemGroup>
+	
 	<ItemGroup>
     <None Include="..\..\nuget\readme.txt" PackagePath="readme.txt" Pack="true" />
 		<Compile Include="**\*.shared.cs" />
@@ -58,7 +62,7 @@
 	<ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
 	</ItemGroup>
 
-	<ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
+	<ItemGroup Condition=" $(TargetFramework.StartsWith('uap')) ">
 		<Compile Include="**\*.uwp.cs" />
 	</ItemGroup>
 
@@ -76,8 +80,6 @@
 	<ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.tvOS')) ">
 		<Compile Include="**\*.tvos.cs" />
 	</ItemGroup>
-
-
+	
 	<Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
-
 </Project>
