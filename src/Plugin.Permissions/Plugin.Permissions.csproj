@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.41">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netstandard2.1;MonoAndroid80;MonoAndroid81;MonoAndroid90;Xamarin.iOS10;Xamarin.tvOS10;</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;MonoAndroid70;MonoAndroid71;MonoAndroid80;MonoAndroid81;MonoAndroid90;Xamarin.iOS10;Xamarin.tvOS10;</TargetFrameworks>
 		<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.16299;</TargetFrameworks>
 	</PropertyGroup>
 	
@@ -73,12 +73,8 @@
 		<PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
-		<Compile Include="**\*.ios.cs" />
-	</ItemGroup>
-
-	<ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.tvOS')) ">
-		<Compile Include="**\*.tvos.cs" />
+	<ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) OR $(TargetFramework.StartsWith('Xamarin.tvOS'))">
+		<Compile Include="**\*.apple.cs" />
 	</ItemGroup>
 	
 	<Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
