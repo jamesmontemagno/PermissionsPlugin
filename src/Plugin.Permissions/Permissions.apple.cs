@@ -53,7 +53,7 @@ namespace Plugin.Permissions
 #if __IOS__
 					return Task.FromResult(GetEventPermissionStatus(EKEntityType.Event));
 #elif __TVOS__
-					return Task.FromResult(PermissionStatus.Unknown);
+					return Task.FromResult(PermissionStatus.Granted);
 #endif
 				case Permission.Camera:
 					return Task.FromResult(GetAVPermissionStatus(AVMediaType.Video));
@@ -73,7 +73,7 @@ namespace Plugin.Permissions
 #if __IOS__
 					return Task.FromResult(GetEventPermissionStatus(EKEntityType.Reminder));
 #elif __TVOS__
-					return Task.FromResult(PermissionStatus.Unknown);
+					return Task.FromResult(PermissionStatus.Granted);
 #endif
 				case Permission.Sensors:
 					return Task.FromResult(SensorsPermissionStatus);
@@ -157,7 +157,7 @@ namespace Plugin.Permissions
 				return PermissionStatus.Unknown;
 			}
 #elif __TVOS__
-			return PermissionStatus.Unknown;
+			return PermissionStatus.Granted;
 #endif
 		}
 
@@ -179,7 +179,7 @@ namespace Plugin.Permissions
 					return PermissionStatus.Unknown;
 			}
 #elif __TVOS__
-			return PermissionStatus.Unknown;
+			return PermissionStatus.Granted;
 #endif
 		}
 #endregion
@@ -203,7 +203,7 @@ namespace Plugin.Permissions
 						return PermissionStatus.Unknown;
 				}
 #elif __TVOS__
-				return PermissionStatus.Unknown;
+				return PermissionStatus.Granted;
 #endif
 			}
 		}
@@ -225,7 +225,7 @@ namespace Plugin.Permissions
 
 			return tcs.Task;
 #elif __TVOS__
-			return Task.FromResult(PermissionStatus.Unknown);
+			return Task.FromResult(PermissionStatus.Granted);
 #endif
 		}
 #endregion
@@ -292,10 +292,10 @@ namespace Plugin.Permissions
 				if (info.ContainsKey(new NSString("NSLocationAlwaysUsageDescription")))
 #if __IOS__
 					locationManager.RequestAlwaysAuthorization();
-#elif __TVOS__
-					throw new UnauthorizedAccessException($"{permission} is not supported on tvOS");
-#endif
 				else if (info.ContainsKey(new NSString("NSLocationWhenInUseUsageDescription")))
+#elif __TVOS__
+				if (info.ContainsKey(new NSString("NSLocationWhenInUseUsageDescription")))
+#endif
 					locationManager.RequestWhenInUseAuthorization();
 				else
 					throw new UnauthorizedAccessException("On iOS 8.0 and higher you must set either NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in your Info.plist file to enable Authorization Requests for Location updates!");
@@ -307,8 +307,6 @@ namespace Plugin.Permissions
 					locationManager.RequestAlwaysAuthorization();
 				else
 					throw new UnauthorizedAccessException("On iOS 8.0 and higher you must set either NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in your Info.plist file to enable Authorization Requests for Location updates!");
-#elif __TVOS__
-				throw new UnauthorizedAccessException($"{permission} is not supported on tvOS");
 #endif
 			}
 			else
@@ -496,7 +494,7 @@ namespace Plugin.Permissions
 
 				return sensorStatus;
 #elif __TVOS__
-				return PermissionStatus.Unknown;
+				return PermissionStatus.Granted;
 #endif
 			}
 		}
@@ -560,7 +558,7 @@ namespace Plugin.Permissions
 			});
 			return tcs.Task;
 #elif __TVOS__
-			return Task.FromResult(PermissionStatus.Unknown);
+			return Task.FromResult(PermissionStatus.Granted);
 #endif
 		}
 
@@ -582,7 +580,7 @@ namespace Plugin.Permissions
 						return PermissionStatus.Unknown;
 				}
 #elif __TVOS__
-				return PermissionStatus.Unknown;
+				return PermissionStatus.Granted;
 #endif
 			}
 		}
@@ -611,7 +609,7 @@ namespace Plugin.Permissions
 						return PermissionStatus.Unknown;
 				}
 #elif __TVOS__
-				return PermissionStatus.Unknown;
+				return PermissionStatus.Granted;
 #endif
 			}
 		}
@@ -650,7 +648,7 @@ namespace Plugin.Permissions
 
 			return tcs.Task;
 #elif __TVOS__
-			return Task.FromResult(PermissionStatus.Unknown);
+			return Task.FromResult(PermissionStatus.Granted);
 #endif
 		}
 
