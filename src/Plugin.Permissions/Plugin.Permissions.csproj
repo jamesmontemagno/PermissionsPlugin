@@ -73,7 +73,7 @@
 		<PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) OR $(TargetFramework.StartsWith('Xamarin.tvOS'))">
+	<ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) OR $(TargetFramework.StartsWith('Xamarin.TVOS'))">
 		<Compile Include="**\*.apple.cs" />
 	</ItemGroup>
 	
