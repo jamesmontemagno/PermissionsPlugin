@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Plugin.CurrentActivity;
+
 using Android.Content;
 
 [assembly: LinkerSafe]
@@ -38,10 +38,10 @@ namespace Plugin.Permissions
 		/// <param name="permission">Permission to check.</param>
 		public Task<bool> ShouldShowRequestPermissionRationaleAsync(Permission permission)
 		{
-			var activity = CrossCurrentActivity.Current.Activity;
+			var activity = Xamarin.Essentials.Platform.CurrentActivity;
 			if (activity == null)
 			{
-				Debug.WriteLine("Unable to detect current Activity. Please ensure Plugin.CurrentActivity is installed in your Android project and your Application class is registering with Application.IActivityLifecycleCallbacks.");
+				Debug.WriteLine("Unable to detect current Activity. Please ensure Plugin.CurrentActivity is installed in your Android project and properly initiliazed.");
 				return Task.FromResult(false);
 			}
 
@@ -93,10 +93,10 @@ namespace Plugin.Permissions
 				return Task.FromResult(PermissionStatus.Unknown);
 			}
 
-			var context = CrossCurrentActivity.Current.Activity ?? CrossCurrentActivity.Current.AppContext;
+			var context = Xamarin.Essentials.Platform.CurrentActivity ?? Xamarin.Essentials.Platform.AppContext;
 			if (context == null)
 			{
-				Debug.WriteLine("Unable to detect current Activity or App Context. Please ensure Plugin.CurrentActivity is installed in your Android project and your Application class is registering with Application.IActivityLifecycleCallbacks.");
+				Debug.WriteLine("Unable to detect current Activity or App Context. Please ensure Plugin.CurrentActivity is installed in your Android project and properly initiliazed.");
 				return Task.FromResult(PermissionStatus.Unknown);
 			}
 
@@ -134,10 +134,10 @@ namespace Plugin.Permissions
 			{
 				results = new Dictionary<Permission, PermissionStatus>();
 			}
-			var activity = CrossCurrentActivity.Current.Activity;
+			var activity = Xamarin.Essentials.Platform.CurrentActivity;
 			if (activity == null)
 			{
-				Debug.WriteLine("Unable to detect current Activity. Please ensure Plugin.CurrentActivity is installed in your Android project and your Application class is registering with Application.IActivityLifecycleCallbacks.");
+				Debug.WriteLine("Unable to detect current Activity. Please ensure Xamarin.Essentials is installed in your Android project and properly initiliazed.");
 				foreach (var permission in permissions)
 				{
 					lock (locker)
@@ -404,11 +404,11 @@ namespace Plugin.Permissions
 					return requestedPermissions.Any(r => r.Equals(permission, StringComparison.InvariantCultureIgnoreCase));
 
 				//try to use current activity else application context
-				var context = CrossCurrentActivity.Current.Activity ?? CrossCurrentActivity.Current.AppContext;
+				var context = Xamarin.Essentials.Platform.CurrentActivity ?? Xamarin.Essentials.Platform.AppContext;
 
 				if (context == null)
 				{
-					Debug.WriteLine("Unable to detect current Activity or App Context. Please ensure Plugin.CurrentActivity is installed in your Android project and your Application class is registering with Application.IActivityLifecycleCallbacks.");
+					Debug.WriteLine("Unable to detect current Activity or App Context. Please ensure Xamarin.Essentials is installed in your Android project and properly initiliazed.");
 					return false;
 				}
 
@@ -444,7 +444,7 @@ namespace Plugin.Permissions
 		public bool OpenAppSettings()
 		{
 
-			var context = CrossCurrentActivity.Current.Activity ?? CrossCurrentActivity.Current.AppContext;
+			var context = Xamarin.Essentials.Platform.CurrentActivity ?? Xamarin.Essentials.Platform.AppContext;
 			if (context == null)
 				return false;
 
