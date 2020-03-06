@@ -56,6 +56,7 @@
 	
 	<ItemGroup>
     <None Include="..\..\nuget\readme.txt" PackagePath="readme.txt" Pack="true" />
+		<PackageReference Include="Xamarin.Essentials" Version="1.5.1"/>
 		<Compile Include="**\*.shared.cs" />
 	</ItemGroup>
 
@@ -67,8 +68,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
-		<Compile Include="**\*.android.cs" />
-		<PackageReference Include="Xamarin.Essentials" Version="1.5.0"/>				
+		<Compile Include="**\*.android.cs" />		
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetFramework.StartsWith('MonoAndroid')) And '$(TargetFramework)' != 'MonoAndroid10.0'">
