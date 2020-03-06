@@ -1,14 +1,18 @@
 using Android;
+using Android.Content;
+#if __ANDROID_29__
+using AndroidX.Core.App;
+using AndroidX.Core.Content;
+#else
 using Android.Support.V4.App;
 using Android.Support.V4.Content;
+#endif
 using Plugin.Permissions.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Plugin.CurrentActivity;
-using Android.Content;
 
 [assembly: LinkerSafe]
 namespace Plugin.Permissions
@@ -38,10 +42,10 @@ namespace Plugin.Permissions
 		/// <param name="permission">Permission to check.</param>
 		public Task<bool> ShouldShowRequestPermissionRationaleAsync(Permission permission)
 		{
-			var activity = CrossCurrentActivity.Current.Activity;
+			var activity = Xamarin.Essentials.Platform.CurrentActivity;
 			if (activity == null)
 			{
-				Debug.WriteLine("Unable to detect current Activity. Please ensure Plugin.CurrentActivity is installed in your Android project and your Application class is registering with Application.IActivityLifecycleCallbacks.");
+				Debug.WriteLine("Unable to detect current Activity. Please ensure Xamarin.Essentials is installed in your Android project and is initialized.");
 				return Task.FromResult(false);
 			}
 
@@ -93,12 +97,9 @@ namespace Plugin.Permissions
 				return Task.FromResult(PermissionStatus.Unknown);
 			}
 
-			var context = CrossCurrentActivity.Current.Activity ?? CrossCurrentActivity.Current.AppContext;
+			var context = GetContext();
 			if (context == null)
-			{
-				Debug.WriteLine("Unable to detect current Activity or App Context. Please ensure Plugin.CurrentActivity is installed in your Android project and your Application class is registering with Application.IActivityLifecycleCallbacks.");
 				return Task.FromResult(PermissionStatus.Unknown);
-			}
 
 			var targetsMOrHigher = context.ApplicationInfo.TargetSdkVersion >= Android.OS.BuildVersionCodes.M;
 
@@ -134,10 +135,10 @@ namespace Plugin.Permissions
 			{
 				results = new Dictionary<Permission, PermissionStatus>();
 			}
-			var activity = CrossCurrentActivity.Current.Activity;
+			var activity = Xamarin.Essentials.Platform.CurrentActivity;
 			if (activity == null)
 			{
-				Debug.WriteLine("Unable to detect current Activity. Please ensure Plugin.CurrentActivity is installed in your Android project and your Application class is registering with Application.IActivityLifecycleCallbacks.");
+				Debug.WriteLine("Unable to detect current Activity. Please ensure Xamarin.Essentials is installed in your Android project and is initialized.");
 				foreach (var permission in permissions)
 				{
 					lock (locker)
@@ -254,6 +255,9 @@ namespace Plugin.Permissions
 					return Permission.Contacts;
 				case Manifest.Permission.AccessCoarseLocation:
 				case Manifest.Permission.AccessFineLocation:
+#if __ANDROID_29__
+				case Manifest.Permission.AccessBackgroundLocation:
+#endif
 					return Permission.Location;
 				case Manifest.Permission.RecordAudio:
 					return Permission.Microphone;
@@ -313,6 +317,29 @@ namespace Plugin.Permissions
 					}
 					break;
 				case Permission.LocationAlways:
+					{
+						if (HasPermissionInManifest(Manifest.Permission.AccessCoarseLocation))
+							permissionNames.Add(Manifest.Permission.AccessCoarseLocation);
+
+
+						if (HasPermissionInManifest(Manifest.Permission.AccessFineLocation))
+							permissionNames.Add(Manifest.Permission.AccessFineLocation);
+
+#if __ANDROID_29__
+						var context = GetContext();
+						if (context == null)
+							break;
+
+						var targetsQ = context.ApplicationInfo.TargetSdkVersion >= Android.OS.BuildVersionCodes.Q;
+						var runningQ = (int)Android.OS.Build.VERSION.SdkInt >= (int)Android.OS.BuildVersionCodes.Q;
+						if (targetsQ && runningQ)
+						{
+							if (HasPermissionInManifest(Manifest.Permission.AccessBackgroundLocation))
+								permissionNames.Add(Manifest.Permission.AccessBackgroundLocation);
+						}
+#endif
+					}
+					break;
 				case Permission.LocationWhenInUse:
 				case Permission.Location:
 					{
@@ -396,6 +423,17 @@ namespace Plugin.Permissions
 			return permissionNames;
 		}
 
+		Context GetContext()
+		{
+			var context = Xamarin.Essentials.Platform.CurrentActivity ?? Xamarin.Essentials.Platform.AppContext;
+			if (context == null)
+			{
+				Debug.WriteLine("Unable to detect current Activity or App Context. Please ensure Xamarin.Essentials is installed in your Android project initialized.");				
+			}
+
+			return context;
+		}
+
 		bool HasPermissionInManifest(string permission)
 		{
 			try
@@ -404,13 +442,10 @@ namespace Plugin.Permissions
 					return requestedPermissions.Any(r => r.Equals(permission, StringComparison.InvariantCultureIgnoreCase));
 
 				//try to use current activity else application context
-				var context = CrossCurrentActivity.Current.Activity ?? CrossCurrentActivity.Current.AppContext;
+				var context = GetContext();
 
 				if (context == null)
-				{
-					Debug.WriteLine("Unable to detect current Activity or App Context. Please ensure Plugin.CurrentActivity is installed in your Android project and your Application class is registering with Application.IActivityLifecycleCallbacks.");
 					return false;
-				}
 
 				var info = context.PackageManager.GetPackageInfo(context.PackageName, Android.Content.PM.PackageInfoFlags.Permissions);
 
@@ -444,7 +479,7 @@ namespace Plugin.Permissions
 		public bool OpenAppSettings()
 		{
 
-			var context = CrossCurrentActivity.Current.Activity ?? CrossCurrentActivity.Current.AppContext;
+			var context = GetContext();
 			if (context == null)
 				return false;
 

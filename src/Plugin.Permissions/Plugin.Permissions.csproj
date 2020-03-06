@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.41">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard1.0;netstandard2.0;MonoAndroid70;MonoAndroid71;MonoAndroid80;MonoAndroid81;MonoAndroid90;Xamarin.iOS10;Xamarin.TVOS10;</TargetFrameworks>
+		<TargetFrameworks>netstandard1.0;netstandard2.0;MonoAndroid80;MonoAndroid81;MonoAndroid90;MonoAndroid10.0;Xamarin.iOS10;Xamarin.TVOS10;</TargetFrameworks>
 		<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.16299;</TargetFrameworks>
 	</PropertyGroup>
 	
@@ -68,9 +68,16 @@
 
 	<ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
 		<Compile Include="**\*.android.cs" />
-		<PackageReference Include="Plugin.CurrentActivity" Version="2.1.0.4" />
+		<PackageReference Include="Xamarin.Essentials" Version="1.5.0"/>				
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetFramework.StartsWith('MonoAndroid')) And '$(TargetFramework)' != 'MonoAndroid10.0'">
 		<PackageReference Include="Xamarin.Android.Support.Compat" Version="28.0.0.3" />
 		<PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'MonoAndroid10.0'">
+		<PackageReference Include="Xamarin.AndroidX.Core" Version="1.1.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) OR $(TargetFramework.StartsWith('Xamarin.TVOS'))">

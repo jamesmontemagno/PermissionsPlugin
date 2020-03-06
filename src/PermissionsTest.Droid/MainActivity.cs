@@ -13,14 +13,13 @@ namespace PermissionsTest.Droid
     {
         protected override void OnCreate(Bundle bundle)
 		{
-			ToolbarResource = Resource.Layout.toolbar;
 
 			base.OnCreate(bundle);
 
             Forms.Init(this, bundle);
 
 
-			Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, bundle);
+			Xamarin.Essentials.Platform.Init(this, bundle);
 
 			LoadApplication(new App());
         }
