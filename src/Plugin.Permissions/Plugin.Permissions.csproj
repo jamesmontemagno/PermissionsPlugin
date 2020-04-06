@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.41">
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard1.0;netstandard2.0;MonoAndroid80;MonoAndroid81;MonoAndroid90;MonoAndroid10.0;Xamarin.iOS10;Xamarin.TVOS10;</TargetFrameworks>
@@ -26,7 +26,7 @@
 			Check to see if your users have granted or denied permissions for common permission groups on iOS and Android.
 			Additionally, you can request permissions with a simple cross-platform async/awaitified API.
 		</Description>
-		<Copyright>Copyright 2019</Copyright>
+		<Copyright>Copyright 2020</Copyright>
 		<RepositoryUrl>https://github.com/jamesmontemagno/PermissionsPlugin</RepositoryUrl>
 		<PackageReleaseNotes>See: https://github.com/jamesmontemagno/PermissionsPlugin </PackageReleaseNotes>
 		<NeutralLanguage>en</NeutralLanguage>
@@ -56,7 +56,7 @@
 	
 	<ItemGroup>
     <None Include="..\..\nuget\readme.txt" PackagePath="readme.txt" Pack="true" />
-		<PackageReference Include="Xamarin.Essentials" Version="1.5.1"/>
+		<PackageReference Include="Xamarin.Essentials" Version="1.5.2"/>
 		<Compile Include="**\*.shared.cs" />
 	</ItemGroup>
 
