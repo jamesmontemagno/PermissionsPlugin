@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Plugin.Permissions.Abstractions
@@ -34,6 +35,7 @@ namespace Plugin.Permissions.Abstractions
 		/// </summary>
 		/// <returns><c>true</c> if this instance has permission the specified permission; otherwise, <c>false</c>.</returns>
 		/// <param name="permission">Permission to check.</param>
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		[Obsolete("CheckPermissionStatusAsync is deprecated, please use CheckPermissionStatusAsync<T> instead.")]
 		Task<PermissionStatus> CheckPermissionStatusAsync(Permission permission);
 
@@ -42,6 +44,7 @@ namespace Plugin.Permissions.Abstractions
 		/// </summary>
 		/// <returns>The permissions and their status.</returns>
 		/// <param name="permissions">Permissions to request.</param>
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		[Obsolete("RequestPermissionsAsync is deprecated, please use RequestPermissionAsync<T> instead.")]
 		Task<Dictionary<Permission, PermissionStatus>> RequestPermissionsAsync(params Permission[] permissions);
 

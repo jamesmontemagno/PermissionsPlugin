@@ -19,18 +19,20 @@ namespace PermissionsSample.Droid
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+			ToolbarResource = Resource.Layout.toolbar;
 
-            Forms.Init(this, bundle);
-
-            ToolbarResource = Resource.Layout.toolbar;
-
-            LoadApplication(new App());
+			Forms.Init(this, bundle);
+			Xamarin.Essentials.Platform.Init(this, bundle);
+			LoadApplication(new App());
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
-        {
-            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
+		{
+			Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+			PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+			base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+		}
     }
 }
 

@@ -1,9 +1,5 @@
 ﻿using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -11,9 +7,9 @@ namespace PermissionsSample
 {
 	public static class Utils
 	{
-		public static async Task<PermissionStatus> CheckPermissions(Permission permission)
+		public static async Task<PermissionStatus> CheckPermissions(BasePermission permission)
 		{
-			var permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(permission);
+			var permissionStatus = await permission.CheckPermissionStatusAsync();
 			bool request = false;
 			if (permissionStatus == PermissionStatus.Denied)
 			{
@@ -43,18 +39,11 @@ namespace PermissionsSample
 
 			if (request || permissionStatus != PermissionStatus.Granted)
 			{
-				var newStatus = await CrossPermissions.Current.RequestPermissionsAsync(permission);
+				permissionStatus = await permission.RequestPermissionAsync();
 				
-				if (!newStatus.ContainsKey(permission))
-				{
-					return permissionStatus;					
-				}
 
-				permissionStatus = newStatus[permission];
-
-				if (newStatus[permission] != PermissionStatus.Granted)
+				if (permissionStatus != PermissionStatus.Granted)
 				{
-					permissionStatus = newStatus[permission];
 					var title = $"{permission} Permission";
 					var question = $"To use the plugin the {permission} permission is required.";
 					var positive = "Settings";
