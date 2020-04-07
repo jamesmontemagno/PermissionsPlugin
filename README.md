@@ -4,6 +4,16 @@ Simple cross platform plugin to request and check permissions.
 
 Want to read about the creation, checkout my [in-depth blog post](http://motzcod.es/post/133939517717/simplified-ios-android-runtime-permissions-with).
 
+### The Future: [Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials/index?WT.mc_id=docs-github-jamont)
+
+I have been working on Plugins for Xamarin for a long time now. Through the years I have always wanted to create a single, optimized, and official package from the Xamarin team at Microsoft that could easily be consumed by any application. The time is now with [Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials/index?WT.mc_id=docs-github-jamont), which offers over 50 cross-platform native APIs in a single optimized package. I worked on this new library with an amazing team of developers and I highly highly highly recommend you check it out.
+
+I will continue to work and maintain my Plugins, but I do recommend you checkout Xamarin.Essentials to see if it is a great fit your app as it has been for all of mine!
+
+### Xamarin.Essentials Migration
+
+This plugin and Xamarin.Essentials store information in the same exact location :). This means you can seemlessly swap out this plugin for Xamarin.Essentials and not lose any data. Checkout my blog for more info: https://montemagno.com/upgrading-from-plugins-to-xamarin-essentials/
+
 ### Setup
 * Available on NuGet: http://www.nuget.org/packages/Plugin.Permissions [![NuGet](https://img.shields.io/nuget/v/Plugin.Permissions.svg?label=NuGet)](https://www.nuget.org/packages/Plugin.Permissions/)
 * Install into your PCL/.NET Standard project and Client projects.
