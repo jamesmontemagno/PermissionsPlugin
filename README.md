@@ -10,9 +10,6 @@ I have been working on Plugins for Xamarin for a long time now. Through the year
 
 I will continue to work and maintain my Plugins, but I do recommend you checkout Xamarin.Essentials to see if it is a great fit your app as it has been for all of mine!
 
-### Xamarin.Essentials Migration
-
-This plugin and Xamarin.Essentials store information in the same exact location :). This means you can seemlessly swap out this plugin for Xamarin.Essentials and not lose any data. Checkout my blog for more info: https://montemagno.com/upgrading-from-plugins-to-xamarin-essentials/
 
 ### Setup
 * Available on NuGet: http://www.nuget.org/packages/Plugin.Permissions [![NuGet](https://img.shields.io/nuget/v/Plugin.Permissions.svg?label=NuGet)](https://www.nuget.org/packages/Plugin.Permissions/)
