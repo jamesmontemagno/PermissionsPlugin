@@ -26,7 +26,7 @@ I will continue to work and maintain my Plugins, but I do recommend you checkout
 
 *See platform notes below
 
-Build Status: ![Build status](https://jamesmontemagno.visualstudio.com/_apis/public/build/definitions/6b79a378-ddd6-4e31-98ac-a12fcd68644c/19/badge)
+Build Status: ![Build status](https://jamesmontemagno.visualstudio.com/_apis/public/build/definitions/6b79a378-ddd6-4e31-98ac-a12fcd68644c/19/badge?WT.mc_id=permissionsplugin-github-jamont)
 
 ### Android specific in your BaseActivity or MainActivity (for Xamarin.Forms) add this code:
 ```csharp
@@ -39,7 +39,7 @@ public override void OnRequestPermissionsResult(int requestCode, string[] permis
 
 ## Android Setup
 
-This plugin uses the [Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials/), please follow the setup guide.
+This plugin uses the [Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials/?WT.mc_id=permissionsplugin-github-jamont), please follow the setup guide.
 
 ```csharp
 Xamarin.Essentials.Platform.Init(this, bundle);
