@@ -26,7 +26,7 @@ I will continue to work and maintain my Plugins, but I do recommend you checkout
 
 *See platform notes below
 
-Build Status: ![Build status](https://jamesmontemagno.visualstudio.com/_apis/public/build/definitions/6b79a378-ddd6-4e31-98ac-a12fcd68644c/19/badge?WT.mc_id=permissionsplugin-github-jamont)
+Build Status: ![Build status](https://jamesmontemagno.visualstudio.com/_apis/public/build/definitions/6b79a378-ddd6-4e31-98ac-a12fcd68644c/19/badge)
 
 ### Android specific in your BaseActivity or MainActivity (for Xamarin.Forms) add this code:
 ```csharp
