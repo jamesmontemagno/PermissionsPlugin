@@ -39,7 +39,7 @@ public override void OnRequestPermissionsResult(int requestCode, string[] permis
 
 ## Android Setup
 
-This plugin uses the [Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials/), please follow the setup guide.
+This plugin uses the [Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials/?WT.mc_id=permissionsplugin-github-jamont), please follow the setup guide.
 
 ```csharp
 Xamarin.Essentials.Platform.Init(this, bundle);
