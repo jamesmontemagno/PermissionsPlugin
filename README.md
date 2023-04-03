@@ -6,7 +6,11 @@ Want to read about the creation, checkout my [in-depth blog post](http://motzcod
 
 ### Migrate to: [Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials/index?WT.mc_id=friends-0000-jamont) & [.NET MAUI](https://learn.microsoft.com/dotnet/maui/platform-integration/appmodel/permissions?WT.mc_id=friends-0000-jamont)
 
-I have been working on Plugins for Xamarin for a long time now. Through the years I have always wanted to create a single, optimized, and official package from the Xamarin team at Microsoft that could easily be consumed by any application. The time is now with [Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials/index?WT.mc_id=friends-0000-jamont), which offers over 50 cross-platform native APIs in a single optimized package. I worked on this new library with an amazing team of developers and I highly highly highly recommend you check it out. Additionally, Xamarin.Essentials is now included in & [.NET MAUI](https://learn.microsoft.com/dotnet/maui/platform-integration/appmodel/permissions?WT.mc_id=friends-0000-jamont).
+I have been working on Plugins for Xamarin for a long time now. Through the years I have always wanted to create a single, optimized, and official package from the Xamarin team at Microsoft that could easily be consumed by any application. The time is now with [Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials/index?WT.mc_id=friends-0000-jamont), which offers over 50 cross-platform native APIs in a single optimized package. I worked on this new library with an amazing team of developers and I highly highly highly recommend you check it out. 
+
+Additionally, Xamarin.Essentials is now included in & [.NET MAUI](https://learn.microsoft.com/dotnet/maui/platform-integration/appmodel/permissions?WT.mc_id=friends-0000-jamont).
+
+Due to the functionality being included "in the box" I have decided to officially archive this repo.
 
 
 
